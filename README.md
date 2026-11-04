@@ -36,7 +36,6 @@ js/
   drawing/            astronaut.js - spacecraft.js - terrain.js - props.js - props_objects.js
   main.js             loads pictures, then starts the game
 assets/images/        pictures    assets/fonts/   fonts    assets/audio/voice/  (optional voices)
-docs/CODE_TOUR.md   how the game works + judge questions
 ```
 
 ## 5. Who edits what
@@ -55,7 +54,7 @@ docs/CODE_TOUR.md   how the game works + judge questions
 - **Change a planet's gravity / jump:** `js/data/config.js` -> `jump` -> `moon` -> `gravity` (smaller = floatier) and `jumpSpeed` (bigger = higher).
 - **Walking speed:** `config.js` -> `walkSpeed`.
 - **Replace an image:** put a new file in `assets/images/` with the **same name**.
-- **Use real astronaut side pictures:** see `ASSETS_NEEDED.md`.
+- **Use real astronaut side pictures:** add `assets/images/astronaut/<suit>-side.png` (suits: `white-blue`, `purple`, `pink`; facing right, transparent background), then set `hasSidePictures: true` in `js/data/config.js`.
 
 ## 7. Sound and voice help
 - Browsers block sound until the first click. The **PLAY NOW** click starts the music.

@@ -1,6 +1,9 @@
 # Not needed to run or understand the game
 GAME_SPEC.md
 PLAN.md
+DECISIONS.md
+ASSETS_NEEDED.md
+docs/
 
 # Tools / editors / system files
 node_modules/
