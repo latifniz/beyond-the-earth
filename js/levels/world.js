@@ -24,7 +24,8 @@ Game.world.getCell = function (level, cellX, cellZ) {
   let totalWeight = 0;
   for (let k = 0; k < kinds.length; k++) { totalWeight += kinds[k].weight; }
 
-  const count = Game.world.perCell + Math.floor(Game.terrain.hash(cellX, cellZ) * 3);
+  const perCell = level.planet.palette.perCell || Game.world.perCell;       // a planet can ask for fewer decorations
+  const count = perCell + Math.floor(Game.terrain.hash(cellX, cellZ) * 3);
   for (let i = 0; i < count; i++) {
     // pick a kind by its weight
     let roll = Game.terrain.hash(cellX * 7 + i, cellZ * 13 + 2) * totalWeight;
@@ -96,6 +97,8 @@ Game.world.drawAll = function (ctx, level) {
     if (item.type === "__player__") { Game.walker.drawPlayer(ctx, level); continue; }
 
     const spot = Game.walker.worldToScreen(level, item.x, item.z);
+    // A standing rock that has just walked past her must not appear in front of her body.
+    if (distance < 0 && !Game.world.flatTypes[item.type] && !item.id && Math.abs(spot.x - 640) < 170) { continue; }
     const onScreenSize = (item.size || 100) * spot.scale;
     if (spot.x < -300 || spot.x > 1580) { continue; }
 

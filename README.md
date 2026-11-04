@@ -11,6 +11,16 @@ Made with only **HTML, CSS and JavaScript**. No internet is needed to play.
 - Tip for presenting: press **F11** (fullscreen) or use the Fullscreen button in Settings.
 - Presenting tip: open `index.html?demo=1`. A small box appears at the top-left: **Unlock all** and jump to any level or quiz. Remove `?demo=1` for the real game.
 
+## 2b. Realistic 3D version (this branch)
+This version uses **Three.js** (a 3D library for the browser) to show real-looking space:
+- **Travel screen:** a movie like NASA's "Eyes on the Solar System". The rocket lifts off from a real-looking Earth with clouds, the camera pulls back to show the Sun, planet orbits and names, then dives down to the Moon, Mars or Venus.
+- **Destination screen:** spinning 3D planets with glowing atmospheres.
+- **Planet levels:** real-looking sky pictures, ground pictures laid on the floor in perspective, and lighting on the astronaut.
+If the computer cannot do 3D, the game automatically falls back to the flat 2D version, so it always works.
+
+**New files:** `js/space/` (the 3D code, with comments), `js/drawing/realistic.js` (backdrops and ground), `assets/vendor/` (Three.js), `assets/textures/` (planet pictures), `tools/make_texture_pack.py`.
+**If you change a picture in `assets/textures/3d/` or `assets/textures/ground/`** run `python3 tools/make_texture_pack.py` and refresh. (Chrome does not let 3D use normal picture files when you double-click `index.html`, so the pictures are packed into `js/data/textures.js`.)
+
 ## 3. How to play
 1. Click **PLAY NOW**. Listen to the teacher and the student. Click **Let's go**.
 2. Pick a suit and click **Next**. Pick the **Moon**.
@@ -25,6 +35,7 @@ index.html          the only page (all screens are inside it)
 css/                how things LOOK (one file per screen)
   variables.css       ALL colors, fonts, sizes
 js/
+  space/              3D space: space3d.js, bodies.js (planets, Sun, stars), rocket3d.js, travel3d.js, cards3d.js
   data/               config.js (numbers) - text.js (words) - quizzes.js (questions)
   core/               game.js (start + screen switching) - audio.js (music, sounds)
                       voice.js (talking) - save.js (remembering) - stars.js (star animations)

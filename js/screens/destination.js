@@ -23,10 +23,15 @@ Game.screens.destination.refreshCards = function () {
 Game.screens.destination.onShow = function () {
   Game.screens.destination.refreshCards();
   Game.screens.destination.stopStars = Game.stars.start(document.getElementById("destination-stars"), "twinkle");
+  // Real-looking spinning 3D planets on the cards (only if 3D works on this computer).
+  if (Game.space.ready) {
+    try { Game.cards3d.start(); } catch (error) { console.log("3D cards not available:", error); }
+  }
 };
 
 Game.screens.destination.onHide = function () {
   if (Game.screens.destination.stopStars) { Game.screens.destination.stopStars(); }
+  Game.cards3d.stop();
 };
 
 const planetCards = document.querySelectorAll(".planet-card");

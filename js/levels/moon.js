@@ -12,16 +12,23 @@ Game.planets.moon = {
   key: "moon",
   title: Game.text.planets.moon.title,
   subtitle: Game.text.planets.moon.subtitle,
-  horizonY: 300,
+  horizonY: 335,
   finish: "popup",
+
+  // REAL-LOOKING PICTURES (see js/drawing/realistic.js). The backdrop already contains the Sun, the Earth and the hills.
+  backdrop: { image: "assets/images/backdrops/moon-sky.jpg", scale: 0.85, panRange: 60 },
+  groundTexture: { name: "moon-ground", tileSize: 450, fog: "rgb(104,99,102)", fogMid: "rgba(104,99,102,0.45)" },
+  // The colors of the light on the astronaut (the Sun is on the left on the Moon).
+  light: { tint: "rgba(150,170,230,0.07)", sun: "rgba(255,238,210,0.24)", shade: "rgba(10,10,40,0.30)", ground: "rgba(60,55,60,0.28)" },
+  vignette: 0.38,
 
   // ----- colors and decorations -----
   palette: {
-    sky: ["#01010a", "#06081a", "#10142a"],
+    sky: ["#0a090c", "#16151a"],
     stars: true,
     groundFar: "#8a8a94", groundMid: "#6f6f79", groundNear: "#4a4a53",
     band: "rgba(0,0,0,0.07)", haze: "rgba(190,190,210,0.28)",
-    rockLight: "#bdbdc6", rockDark: "#62626d",
+    rockLight: "#b9afa7", rockDark: "#5a534e",
     craterRim: "#a2a2ac", craterDark: "#41414b", craterLight: "#7d7d88",
     hills: [
       { color: "#3d3d49", height: 34, amplitude: 70, parallax: 0.03, seed: 1.2 },
@@ -30,14 +37,14 @@ Game.planets.moon = {
     ],
     decor: [
       { type: "rock", weight: 5, min: 45, max: 170 },
-      { type: "crater", weight: 2, min: 70, max: 200 },
-      { type: "pebbles", weight: 4, min: 30, max: 70 },
-      { type: "specks", weight: 9, min: 40, max: 120 }
+      { type: "crater", weight: 1, min: 70, max: 200 },
+      { type: "pebbles", weight: 4, min: 30, max: 70 }
     ]
   },
 
   // Sun partly visible in the LEFT CORNER, and the Earth in the sky.
-  drawSky: function (ctx, level) {
+  drawSky: function (ctx, level, hasBackdrop) {
+    if (hasBackdrop) { return; }          // the picture already has the Sun and the Earth
     Game.terrain.drawSunRays(ctx, -30, 150, 520, level.time);
     Game.terrain.drawGlow(ctx, -30, 150, 330, "rgba(255,240,200,0.95)", "rgba(255,200,120,0)");
     ctx.fillStyle = "#fffbe8";

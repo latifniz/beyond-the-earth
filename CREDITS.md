@@ -18,6 +18,13 @@ NASA media are generally not copyrighted; NASA asks us to credit NASA. Please re
 
 Downloaded at game-build time only. The game never loads anything from the internet while running.
 
+## 3D graphics (realistic-graphics branch)
+- **Three.js r147** (MIT licence) - https://threejs.org - `assets/vendor/three.min.js` and the glow/bloom add-ons in `assets/vendor/three-postprocessing.js` (from the same package, `examples/js`). See `assets/vendor/README.txt`.
+- **Planet textures** in `assets/textures/3d/`:
+  - Moon, Mars, Venus (atmosphere), Sun, Milky Way: Solar System Scope textures, https://www.solarsystemscope.com/textures/ (licence CC BY 4.0, based on NASA data).
+  - Earth day map, Earth specular map, Earth clouds: from the Three.js examples (`examples/textures/planets`, MIT licence), made from NASA data.
+- **Backdrops and ground pictures** (`assets/images/backdrops/`, `assets/textures/ground/`): made from four pictures supplied by the team (Moon surface, Mars landscape painting, Venus cloud tops, Venus surface radar picture). Their original source is not recorded; please add it here and confirm the licence before publishing.
+
 ## Fonts (SIL Open Font License 1.1, free to use and embed)
 - **Fredoka** (used under the name "Fredoka One"; Google merged Fredoka One into Fredoka) - https://github.com/google/fonts/tree/main/ofl/fredoka
 - **Montserrat** - https://github.com/google/fonts/tree/main/ofl/montserrat

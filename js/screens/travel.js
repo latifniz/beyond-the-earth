@@ -20,6 +20,22 @@ Game.screens.travel.onShow = function (params) {
   t.finished = false;
   t.landedPlayed = false;
   t.stars = Game.stars.makeList(160, 1280, 720);
+  // Use the real-looking 3D movie if this computer can do 3D; otherwise the flat 2D animation.
+  t.use3d = false;
+  t.total = Game.config.travelSeconds;
+  if (Game.space.ready) {
+    try {
+      t.total = Game.config.travelSeconds3d;
+      Game.travel3d.start(t.planet, t.total - 2.2);
+      t.use3d = true;
+    } catch (error) {
+      console.log("3D travel not available, using 2D:", error);
+      t.total = Game.config.travelSeconds;
+    }
+  }
+  document.getElementById("travel-gl").classList.toggle("hidden", !t.use3d);
+  document.getElementById("travel-canvas").classList.toggle("hidden", t.use3d);
+  document.getElementById("travel-flash").classList.remove("go");
   const name = Game.screens.travel.planetName();
   document.getElementById("travel-text").textContent = Game.text.travel.traveling + name;
   document.getElementById("travel-text").style.opacity = 1;
@@ -49,11 +65,15 @@ Game.screens.travel.frame = function (now) {
   const t = Game.screens.travel;
   if (!t.running) { return; }
   const seconds = (now - t.startTime) / 1000;
-  const total = Game.config.travelSeconds;
+  const total = t.total;
   const flyEnd = total - 2.2;                       // the ship reaches the planet here
-  const ctx = document.getElementById("travel-canvas").getContext("2d");
-  t.drawBackground(ctx, seconds);
-  t.drawPlanetAndShip(ctx, seconds, flyEnd);
+  if (t.use3d) {
+    Game.travel3d.render(seconds);
+  } else {
+    const ctx = document.getElementById("travel-canvas").getContext("2d");
+    t.drawBackground(ctx, seconds);
+    t.drawPlanetAndShip(ctx, seconds, flyEnd);
+  }
 
   if (seconds > 1.2) { document.getElementById("travel-fact").classList.add("show"); }
   if (seconds > flyEnd && !t.landedPlayed) { t.arrive(); }
@@ -128,6 +148,7 @@ Game.screens.travel.arrive = function () {
   const t = Game.screens.travel;
   t.landedPlayed = true;
   Game.audio.stopEngine();
+  if (t.use3d) { document.getElementById("travel-flash").classList.add("go"); }   // white flash: we entered the atmosphere
   if (t.planet === "venus") {
     document.getElementById("travel-text").style.opacity = 0;
     document.getElementById("caution-layer").classList.remove("hidden");
@@ -156,5 +177,5 @@ document.getElementById("caution-ok").addEventListener("click", function () {
 document.getElementById("travel-skip").addEventListener("click", function () {
   const t = Game.screens.travel;
   if (t.planet === "venus" && t.landedPlayed) { return; }
-  t.startTime = performance.now() - (Game.config.travelSeconds - 2.1) * 1000 - 100;
+  t.startTime = performance.now() - (t.total - 2.1) * 1000 - 100;
 });

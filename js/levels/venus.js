@@ -12,12 +12,19 @@ Game.planets.venus = {
   key: "venus",
   title: Game.text.planets.venus.title,
   subtitle: Game.text.planets.venus.subtitle,
-  horizonY: 290,
+  horizonY: 340,
   finish: "send",
+
+  // REAL-LOOKING PICTURES (see js/drawing/realistic.js): hazy sky with the first cloud banks, and cloud ground.
+  backdrop: { image: "assets/images/backdrops/venus-sky.jpg", scale: 1.55, panRange: 70 },
+  groundTexture: { name: "venus-ground", tileSize: 620, fog: "rgb(203,176,102)", fogMid: "rgba(203,176,102,0.45)" },
+  light: { tint: "rgba(255,215,120,0.15)", sun: "rgba(255,245,200,0.2)", shade: "rgba(140,90,20,0.22)", ground: "rgba(210,160,70,0.3)" },
+  grade: "rgba(255,200,80,0.05)",
+  vignette: 0.3,
   spray: true,          // white spray from the shoes (see walker.js)
 
   palette: {
-    sky: ["#ffb41f", "#ffc93a", "#ffdd7a", "#fff0b8"],
+    sky: ["#a18b58", "#b99b5c", "#cdb06c", "#d8bb78"],
     stars: false,
     groundFar: "#fff1c4", groundMid: "#fbdc8e", groundNear: "#efbd55",
     band: "rgba(255,255,255,0.14)", haze: "rgba(255,246,210,0.55)",
@@ -28,6 +35,7 @@ Game.planets.venus = {
       { color: "#ffe08c", height: 4, amplitude: 28, parallax: 0.07, seed: 6.2 },
       { color: "#fdd678", height: -3, amplitude: 14, parallax: 0.12, seed: 1.7 }
     ],
+    perCell: 2,        // fewer puffs: the ground picture already shows the clouds
     decor: [
       { type: "cloud", weight: 10, min: 120, max: 340 }
     ]
@@ -43,11 +51,12 @@ Game.planets.venus = {
   },
 
   // Very bright Sun, soft cloud streaks and yellow lightning in the sky.
-  drawSky: function (ctx, level) {
-    Game.terrain.drawGlow(ctx, 640, 110, 560, "rgba(255,255,240,0.95)", "rgba(255,230,120,0)");
+  drawSky: function (ctx, level, hasBackdrop) {
+    // a very bright Sun glowing through the haze
+    Game.terrain.drawGlow(ctx, 640, 120, 560, hasBackdrop ? "rgba(255,250,225,0.8)" : "rgba(255,255,240,0.95)", "rgba(255,230,120,0)");
     ctx.fillStyle = "#fffef4";
-    ctx.beginPath(); ctx.arc(640, 110, 54, 0, Math.PI * 2); ctx.fill();
-    for (let i = 0; i < 7; i++) {          // warm yellow cloud streaks that drift
+    ctx.beginPath(); ctx.arc(640, 120, 46, 0, Math.PI * 2); ctx.fill();
+    for (let i = 0; i < (hasBackdrop ? 0 : 7); i++) {      // drifting cloud streaks (only needed when there is no sky picture)          // warm yellow cloud streaks that drift
       const x = ((i * 233 + level.time * 6 - level.worldX * 0.05) % 1600 + 1600) % 1600 - 160;
       ctx.fillStyle = "rgba(255,240,170,0.35)";
       ctx.beginPath(); ctx.ellipse(x, 60 + (i * 37) % 180, 170, 18 + (i % 3) * 6, 0, 0, Math.PI * 2); ctx.fill();

@@ -129,9 +129,9 @@
       <p data-text="destination.subtitle"></p>
     </div>
     <div class="planet-row">
-      <div class="planet-card clickable" data-planet="moon"><img src="assets/images/planets/moon.png" alt="Moon"><h3>Moon</h3><p></p><span class="lock">🔒</span></div>
-      <div class="planet-card clickable" data-planet="mars"><img src="assets/images/planets/mars.png" alt="Mars"><h3>Mars</h3><p></p><span class="lock">🔒</span></div>
-      <div class="planet-card clickable" data-planet="venus"><img src="assets/images/planets/venus.png" alt="Venus"><h3>Venus</h3><p></p><span class="lock">🔒</span></div>
+      <div class="planet-card clickable" data-planet="moon"><img src="assets/images/planets/moon.png" alt="Moon"><canvas class="planet-gl" width="460" height="460"></canvas><h3>Moon</h3><p></p><span class="lock">🔒</span></div>
+      <div class="planet-card clickable" data-planet="mars"><img src="assets/images/planets/mars.png" alt="Mars"><canvas class="planet-gl" width="460" height="460"></canvas><h3>Mars</h3><p></p><span class="lock">🔒</span></div>
+      <div class="planet-card clickable" data-planet="venus"><img src="assets/images/planets/venus.png" alt="Venus"><canvas class="planet-gl" width="460" height="460"></canvas><h3>Venus</h3><p></p><span class="lock">🔒</span></div>
     </div>
     <button id="destination-back" class="btn btn-back" data-text="destination.back"></button>
   </section>
@@ -139,11 +139,13 @@
   <!-- ===== 7. TRAVEL ANIMATION ===== -->
   <section id="screen-travel" class="screen">
     <canvas id="travel-canvas" width="1280" height="720"></canvas>
+    <canvas id="travel-gl" class="hidden" width="1280" height="720"></canvas>
+    <div id="travel-flash" class="travel-flash"></div>
     <div id="travel-text" class="travel-text"></div>
     <div id="travel-fact" class="travel-fact"></div>
     <button id="travel-skip" class="icon-btn corner-btn" data-text="travel.skip"></button>
     <div id="caution-layer" class="popup-layer hidden">
-      <div class="popup glass-card"><h3 data-text="travel.venusCautionTitle"></h3><p data-text="travel.venusCaution"></p>
+      <div class="popup glass-card"><img class="caution-pic" src="assets/images/backdrops/venus-surface.jpg" alt=""><h3 data-text="travel.venusCautionTitle"></h3><p data-text="travel.venusCaution"></p>
         <button id="caution-ok" class="btn" data-text="travel.ok"></button></div>
     </div>
   </section>
@@ -212,10 +214,13 @@
 </div>
 
 <!-- Scripts are loaded in this exact order. game.js must be first. No modules (so it works from file://). -->
+<script src="assets/vendor/three.min.js"></script>
+<script src="assets/vendor/three-postprocessing.js"></script>
 <script src="js/core/game.js"></script>
 <script src="js/data/config.js"></script>
 <script src="js/data/text.js"></script>
 <script src="js/data/quizzes.js"></script>
+<script src="js/data/textures.js"></script>
 <script src="js/core/save.js"></script>
 <script src="js/core/audio.js"></script>
 <script src="js/core/voice.js"></script>
@@ -223,8 +228,14 @@
 <script src="js/drawing/astronaut.js"></script>
 <script src="js/drawing/spacecraft.js"></script>
 <script src="js/drawing/terrain.js"></script>
+<script src="js/drawing/realistic.js"></script>
 <script src="js/drawing/props.js"></script>
 <script src="js/drawing/props_objects.js"></script>
+<script src="js/space/space3d.js"></script>
+<script src="js/space/bodies.js"></script>
+<script src="js/space/rocket3d.js"></script>
+<script src="js/space/travel3d.js"></script>
+<script src="js/space/cards3d.js"></script>
 <script src="js/screens/intro.js"></script>
 <script src="js/screens/lab.js"></script>
 <script src="js/screens/settings.js"></script>

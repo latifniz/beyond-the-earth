@@ -19,3 +19,8 @@
 .planet-card.locked:hover { transform: none; box-shadow: var(--glow); }
 .planet-card.locked .lock { display: block; }
 .planet-card.done::after { content: "✔"; position: absolute; right: 18px; top: 12px; font-size: 30px; color: var(--green); }
+
+/* When 3D works, show the live spinning planet (canvas) and hide the flat picture. */
+.planet-gl { display: none; width: 250px; height: 250px; margin: -10px auto -10px; filter: drop-shadow(0 0 22px rgba(160,120,255,0.55)); }
+#screen-destination.gl-on .planet-card img { display: none; }
+#screen-destination.gl-on .planet-gl { display: block; }

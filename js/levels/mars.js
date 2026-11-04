@@ -15,8 +15,16 @@ Game.planets.mars = {
   horizonY: 300,
   finish: "popup",
 
+  // REAL-LOOKING PICTURES (see js/drawing/realistic.js). The little planet in the sky is cut from the painting.
+  backdrop: { image: "assets/images/backdrops/mars-sky.png", scale: 1.0, panRange: 14,
+    sprites: [{ image: "assets/images/backdrops/mars-sky-planet.png", x: 930, y: 130, size: 120, parallax: 0.35 }] },
+  groundTexture: { name: "mars-ground", tileSize: 520, fog: "rgb(212,126,76)", fogMid: "rgba(212,126,76,0.4)" },
+  light: { tint: "rgba(255,150,90,0.12)", sun: "rgba(255,210,160,0.22)", shade: "rgba(90,30,10,0.30)", ground: "rgba(150,70,30,0.35)" },
+  grade: "rgba(255,140,60,0.04)",
+  vignette: 0.32,
+
   palette: {
-    sky: ["#7c4a55", "#c06a58", "#e59a6e", "#f6c99a"],     // rusty, dusty, pinkish-orange haze
+    sky: ["#c26238", "#d97e48", "#ee9f5e", "#f4b97c"],     // rusty, dusty, pinkish-orange haze
     stars: false,
     groundFar: "#d29567", groundMid: "#b06a3c", groundNear: "#7a3b1e",
     band: "rgba(60,15,0,0.07)", haze: "rgba(255,205,160,0.4)",
@@ -31,13 +39,12 @@ Game.planets.mars = {
       { type: "rock", weight: 6, min: 70, max: 230 },
       { type: "dust", weight: 3, min: 100, max: 260 },
       { type: "pebbles", weight: 4, min: 30, max: 70 },
-      { type: "specks", weight: 8, min: 40, max: 120 },
       { type: "crater", weight: 1, min: 80, max: 200 }
     ]
   },
 
   // A small pale sun, hazy light.
-  drawSky: function (ctx, level) {
+  drawSky: function (ctx, level, hasBackdrop) {
     Game.terrain.drawGlow(ctx, 330 - level.worldX * 0.02, 120, 260, "rgba(255,240,215,0.85)", "rgba(255,210,170,0)");
     ctx.fillStyle = "rgba(255,246,228,0.95)";
     ctx.beginPath(); ctx.arc(330 - level.worldX * 0.02, 120, 22, 0, Math.PI * 2); ctx.fill();

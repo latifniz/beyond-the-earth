@@ -145,7 +145,8 @@ Game.walker.drawPlayer = function (ctx, level) {
   const pose = level.pose;
   // Shadow on the ground: smaller and fainter the higher she is.
   const shrink = Math.max(0.35, 1 - level.height / 520);
-  Game.props.shadow(ctx, 640, ground + 4, 52 * shrink, 11 * shrink, 0.4 * shrink);
+  // The Sun is on the LEFT, so her shadow falls a little to the RIGHT.
+  Game.props.shadow(ctx, 662, ground + 4, 58 * shrink, 12 * shrink, 0.42 * shrink);
 
   const jumpLift = level.height;
   const info = { x: 640, feetY: ground - jumpLift, height: Game.walker.astronautHeight };
@@ -162,7 +163,8 @@ Game.walker.drawPlayer = function (ctx, level) {
     moving: level.isMoving || (pose && pose.walking), time: level.time,
     lean: (pose ? pose.lean : level.speedX / Game.config.sideSpeed * 0.05) + (level.height > 0 ? -0.04 : 0),
     armRight: pose && pose.armRight !== undefined ? pose.armRight : null,
-    armLeft: pose && pose.armLeft !== undefined ? pose.armLeft : null
+    armLeft: pose && pose.armLeft !== undefined ? pose.armLeft : null,
+    light: level.planet.light            // colors of this planet's light (so she looks like she belongs there)
   });
   Game.cutscene.drawCarried(ctx, level, info);
   ctx.restore();
@@ -172,16 +174,23 @@ Game.walker.drawPlayer = function (ctx, level) {
 Game.walker.render = function (ctx, level) {
   const palette = level.planet.palette;
   Game.terrain.drawSky(ctx, palette, level.horizonY);
-  if (palette.stars) { Game.terrain.drawStars(ctx, level, level.horizonY); }
-  if (level.planet.drawSky) { level.planet.drawSky(ctx, level); }
-  for (let i = 0; i < palette.hills.length; i++) {
-    Game.terrain.drawHills(ctx, palette.hills[i], level.worldX, level.horizonY);
+  // 1) Sky and far mountains: a real-looking picture if we have one, otherwise the drawn version.
+  const hasBackdrop = Game.realistic.drawBackdrop(ctx, level);
+  if (!hasBackdrop) {
+    if (palette.stars) { Game.terrain.drawStars(ctx, level, level.horizonY); }
+    for (let i = 0; i < palette.hills.length; i++) {
+      Game.terrain.drawHills(ctx, palette.hills[i], level.worldX, level.horizonY);
+    }
   }
-  Game.terrain.drawGround(ctx, level, palette);
+  if (level.planet.drawSky) { level.planet.drawSky(ctx, level, hasBackdrop); }
+  // 2) Ground: real ground picture in perspective, otherwise the drawn gradient ground.
+  if (!Game.realistic.drawGround(ctx, level)) { Game.terrain.drawGround(ctx, level, palette); }
+  // 3) Everything standing on the ground, far to near, with the astronaut in the right place.
   Game.world.drawAll(ctx, level);
   Game.effects.draw(ctx, level);
   Game.walker.drawPointers(ctx, level);
   if (level.planet.drawOverlay) { level.planet.drawOverlay(ctx, level); }
+  Game.realistic.drawGrade(ctx, level);
 };
 
 // ===== GOAL POINTERS: a bouncing arrow above the next goal, or an edge arrow if it is off-screen =====

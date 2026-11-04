@@ -85,8 +85,47 @@ Game.astronaut.drawPicture = function (ctx, picture, o) {
   if (o.flip) { ctx.scale(-1, 1); }
   ctx.rotate(lean);
   ctx.scale(1, stretch);
-  ctx.drawImage(picture, -width / 2, -o.height, width, o.height);
+  if (o.light) {
+    ctx.drawImage(Game.astronaut.lightPicture(picture, width, o.height, o.light), -width / 2, -o.height, width, o.height);
+  } else {
+    ctx.drawImage(picture, -width / 2, -o.height, width, o.height);
+  }
   ctx.restore();
+};
+
+// ===== LIGHTING ON THE PICTURE =====
+// The astronaut pictures were made in a studio. To make her look like she is really standing on
+// the Moon / Mars / Venus, we copy her onto a hidden canvas and paint colored LIGHT on top of her
+// suit only ("source-atop" = paint only where the suit already is, not on the empty background):
+//   - a color tint (the color of the air/sky of that planet)
+//   - warm sunlight on the sunny (left) side, shade on the other side
+//   - a darker bottom (dust and ground shadow)
+Game.astronaut.lightCanvas = document.createElement("canvas");
+Game.astronaut.lightPicture = function (picture, width, height, light) {
+  const canvas = Game.astronaut.lightCanvas;
+  const w = Math.ceil(width);
+  const h = Math.ceil(height);
+  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  const c = canvas.getContext("2d");
+  c.clearRect(0, 0, w, h);
+  c.globalCompositeOperation = "source-over";
+  c.drawImage(picture, 0, 0, w, h);
+  c.globalCompositeOperation = "source-atop";
+  c.fillStyle = light.tint;                                  // overall color of the planet's air
+  c.fillRect(0, 0, w, h);
+  const side = c.createLinearGradient(0, 0, w, 0);          // sunlight from the left, shade on the right
+  side.addColorStop(0, light.sun);
+  side.addColorStop(0.5, "rgba(255,255,255,0)");
+  side.addColorStop(1, light.shade);
+  c.fillStyle = side;
+  c.fillRect(0, 0, w, h);
+  const ground = c.createLinearGradient(0, h * 0.6, 0, h);  // dust makes the legs a little darker
+  ground.addColorStop(0, "rgba(0,0,0,0)");
+  ground.addColorStop(1, light.ground);
+  c.fillStyle = ground;
+  c.fillRect(0, 0, w, h);
+  c.globalCompositeOperation = "source-over";
+  return canvas;
 };
 
 // ===== CODE-DRAWN ASTRONAUT (used when pictures are missing) =====

@@ -11,14 +11,17 @@ Game.preloadList = [
   "assets/images/intro-bg.jpg", "assets/images/lab-bg.jpg", "assets/images/teacher.png",
   "assets/images/student.png", "assets/images/stone.png",
   "assets/images/planets/moon.png", "assets/images/planets/mars.png", "assets/images/planets/venus.png",
-  "assets/images/planets/earth.png", "assets/images/planets/saturn.png"
+  "assets/images/planets/earth.png", "assets/images/planets/saturn.png",
+  // real-looking backdrops and ground pictures for the planet levels
+  "assets/images/backdrops/moon-sky.jpg", "assets/images/backdrops/mars-sky.png", "assets/images/backdrops/mars-sky-planet.png",
+  "assets/images/backdrops/venus-sky.jpg", "assets/images/backdrops/venus-surface.jpg"
 ];
 Game.loadedImages = {};   // path -> Image (levels use these for the Earth, stones, ...)
 
 // Load everything, move the progress bar, then show the intro.
 Game.preloadThenShowIntro = function () {
   Game.showScreen("loading");
-  const total = Game.preloadList.length + 3;    // +3 = astronaut pictures, two fonts
+  const total = Game.preloadList.length + 5;    // +5 = astronaut pictures, two fonts, 3D textures, ground pictures
   let done = 0;
   function oneDone() {
     done++;
@@ -32,6 +35,8 @@ Game.preloadThenShowIntro = function () {
     image.src = Game.preloadList[i];
   }
   Game.astronaut.loadImages(oneDone);
+  Game.realistic.loadGroundImages(oneDone);   // ground pictures of the planet levels
+  Game.space.loadTextures(oneDone);          // 3D planet pictures (does nothing if 3D is not available)
   // Wait for the fonts too. A failed font is OK (the browser uses a backup font).
   document.fonts.load('700 40px "Fredoka One"').then(oneDone, oneDone);
   document.fonts.load('500 20px "Montserrat"').then(oneDone, oneDone);

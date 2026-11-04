@@ -37,7 +37,8 @@ Game.config = {
   hintTime: 2.5,           // how long "Walk closer!" shows
   readingSecondsPerWord: 0.38,   // used when voice is off: time to read a speech bubble
   minBubbleSeconds: 2.2,
-  travelSeconds: 8,        // length of the travel animation
+  travelSeconds: 8,        // length of the flat 2D travel animation
+  travelSeconds3d: 14,     // length of the 3D travel movie (Earth, whole space, destination)
 
   // ----- Venus camera mini-game -----
   photosNeeded: 3,
