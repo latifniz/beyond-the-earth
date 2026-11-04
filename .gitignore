@@ -1,2 +1,13 @@
+# Not needed to run or understand the game
+GAME_SPEC.md
+PLAN.md
+
+# Tools / editors / system files
 node_modules/
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+*.tmp
+*.bak
