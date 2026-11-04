@@ -33,7 +33,12 @@ Game.audio.ensureContext = function () {
   const ctx = new AudioClass();
   Game.audio.ctx = ctx;
   Game.audio.master = ctx.createGain();
-  Game.audio.master.connect(ctx.destination);
+  // A "compressor" works like a limiter: it squashes sudden loud peaks so nothing is ever painfully loud.
+  const limiter = ctx.createDynamicsCompressor();
+  limiter.threshold.value = -24;
+  limiter.ratio.value = 12;
+  Game.audio.master.connect(limiter);
+  limiter.connect(ctx.destination);
   Game.audio.musicGain = ctx.createGain();
   Game.audio.musicGain.gain.value = Game.config.musicLevel;
   Game.audio.musicGain.connect(Game.audio.master);
@@ -133,7 +138,7 @@ Game.audio.play = function (name) {
     a.tone(880, 0.09, "triangle", 0.3);
     a.tone(1320, 0.07, "sine", 0.12, 0.02);
   } else if (name === "whoosh") {
-    a.noiseBurst(1.6, "bandpass", 300, 2400, 0.5);
+    a.noiseBurst(1.6, "bandpass", 300, 1400, 0.1);
   } else if (name === "step") {
     a.noiseBurst(0.12, "lowpass", 500, 120, 0.5);
   } else if (name === "collect") {
@@ -141,8 +146,8 @@ Game.audio.play = function (name) {
     a.tone(990, 0.22, "sine", 0.3, 0.09);
     a.tone(1320, 0.3, "sine", 0.25, 0.18);
   } else if (name === "thud") {
-    a.tone(110, 0.3, "sine", 0.7, 0, 45);
-    a.noiseBurst(0.15, "lowpass", 400, 100, 0.4);
+    a.tone(110, 0.3, "sine", 0.3, 0, 45);
+    a.noiseBurst(0.15, "lowpass", 400, 100, 0.15);
   } else if (name === "hiss") {
     a.noiseBurst(0.9, "highpass", 3000, 6000, 0.35);
   } else if (name === "shutter") {
@@ -158,17 +163,17 @@ Game.audio.play = function (name) {
     a.tone(330, 0.25, "sawtooth", 0.2);
     a.tone(220, 0.4, "sawtooth", 0.2, 0.2);
   } else if (name === "powerup") {
-    a.tone(200, 1.2, "sawtooth", 0.25, 0, 900);
-    a.noiseBurst(1.2, "lowpass", 200, 1200, 0.3);
+    a.tone(200, 1.2, "sine", 0.1, 0, 700);
+    a.noiseBurst(1.2, "lowpass", 200, 700, 0.08);
   } else if (name === "launch") {
-    a.noiseBurst(3, "lowpass", 300, 1800, 0.7);
-    a.tone(70, 3, "sawtooth", 0.3, 0, 200);
+    a.noiseBurst(3, "lowpass", 250, 900, 0.14);
+    a.tone(70, 3, "sine", 0.12, 0, 160);
   } else if (name === "send") {
     a.tone(500, 1.2, "sine", 0.3, 0, 1800);
     a.tone(750, 1.2, "sine", 0.2, 0.15, 2200);
   } else if (name === "land") {
-    a.noiseBurst(1, "lowpass", 900, 150, 0.6);
-    a.tone(90, 0.8, "sine", 0.6, 0.4, 40);
+    a.noiseBurst(1, "lowpass", 600, 150, 0.12);
+    a.tone(90, 0.8, "sine", 0.2, 0.4, 40);
   }
 };
 
@@ -181,13 +186,13 @@ Game.audio.startEngine = function () {
   source.loop = true;
   const filter = ctx.createBiquadFilter();
   filter.type = "lowpass";
-  filter.frequency.value = 220;
+  filter.frequency.value = 160;
   const osc = ctx.createOscillator();
-  osc.type = "sawtooth";
-  osc.frequency.value = 48;
+  osc.type = "sine";
+  osc.frequency.value = 55;
   const gain = ctx.createGain();
   gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.5, ctx.currentTime + 1);
+  gain.gain.exponentialRampToValueAtTime(0.1, ctx.currentTime + 1.5);
   source.connect(filter);
   filter.connect(gain);
   osc.connect(gain);

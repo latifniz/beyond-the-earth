@@ -14,7 +14,7 @@ Made with only **HTML, CSS and JavaScript**. No internet is needed to play.
 ## 3. How to play
 1. Click **PLAY NOW**. Listen to the teacher and the student. Click **Let's go**.
 2. Pick a suit and click **Next**. Pick the **Moon**.
-3. Move with the on-screen buttons (hold them) or the keyboard:
+3. Move in all four directions with the on-screen buttons (hold them) or the keyboard:
    - **Arrow keys / W A S D** = walk, **Space** = jump, **E** = INTERACT
 4. Click glowing items when you are close. Walk to marked spots and press **INTERACT** (or **ACTIVATE**, **TAKE CAMERA**).
 5. Press **Missions** (top right) to see your list. Finish both missions, press **Now Quiz**.

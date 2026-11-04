@@ -20,6 +20,7 @@ function holdButton(buttonId, inputName) {
 holdButton("btn-left", "left");
 holdButton("btn-right", "right");
 holdButton("btn-forward", "forward");
+holdButton("btn-backward", "back");
 
 document.getElementById("btn-jump").addEventListener("pointerdown", function (event) {
   event.preventDefault();

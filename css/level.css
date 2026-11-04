@@ -37,6 +37,9 @@
 
 /* On-screen controls at the bottom-right */
 .controls { position: absolute; right: 26px; bottom: 24px; display: flex; gap: 12px; align-items: flex-end; z-index: 11; }
+.ctrl-column { display: flex; flex-direction: column; gap: 8px; }
+.ctrl-column .ctrl { height: 62px; }
+.controls > .ctrl { margin-bottom: 0; }
 .ctrl { width: 74px; height: 74px; border-radius: 50%; font-family: var(--font-heading); font-size: 28px; color: #fff; cursor: pointer; touch-action: none;
   background: rgba(60, 25, 130, 0.78); border: 2px solid var(--neon-magenta); box-shadow: var(--glow); }
 .ctrl:active, .ctrl.pressed { background: var(--violet); transform: scale(0.94); }

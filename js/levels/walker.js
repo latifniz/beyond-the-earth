@@ -68,7 +68,7 @@ Game.walker.update = function (level, dt) {
   let wantX = 0;
   if (!level.frozen) {
     if (level.input.forward) { wantZ += cfg.walkSpeed; }
-    if (level.input.back) { wantZ -= cfg.walkSpeed * 0.6; }
+    if (level.input.back) { wantZ -= cfg.walkSpeed * 0.85; }
     if (level.input.right) { wantX += cfg.sideSpeed; }
     if (level.input.left) { wantX -= cfg.sideSpeed; }
   }
