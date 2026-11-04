@@ -26,7 +26,7 @@ Game.config = {
 
   // ----- optional pictures and voices (set to true AFTER you add the files) -----
   hasSidePictures: false,      // true if assets/images/astronaut/<suit>-side.png exist
-  useRecordedVoices: false,    // true if assets/audio/voice/teacher-1.mp3, student-1.mp3, teacher-2.mp3 exist
+  useRecordedVoices: true,     // true if assets/audio/voice/teacher-1.mp3, student-1.mp3, teacher-2.mp3 exist
 
   // ----- sound -----
   defaultVolume: 0.6,

@@ -61,7 +61,7 @@ docs/CODE_TOUR.md   how the game works + judge questions
 - Browsers block sound until the first click. The **PLAY NOW** click starts the music.
 - Music and effects are made by the computer (`js/core/audio.js`). No sound files needed.
 - The talking voices come from your computer (the "speechSynthesis" feature of the browser). **Voices are different on every computer.** Chrome on Windows has nice ones. If the teacher and student sound the same, that computer has only one English voice.
-- **Even more natural voice:** record the 3 lines and save them as `assets/audio/voice/teacher-1.mp3`, `student-1.mp3`, `teacher-2.mp3`. Then set `useRecordedVoices: true` in `js/data/config.js`.
+- **Recorded voices:** the game now plays real recordings from `assets/audio/voice/` (`teacher-1.mp3`, `student-1.mp3`, `teacher-2.mp3`), so it sounds the same on every computer. To use your own recordings, replace those files (same names). If a file is missing the game falls back to the computer voice. To switch recordings off, set `useRecordedVoices: false` in `js/data/config.js`.
 - Sound OFF in Settings mutes music, effects **and** voices. The speech bubbles still appear and move on by themselves.
 
 ## 8. Troubleshooting
