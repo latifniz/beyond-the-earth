@@ -10,7 +10,9 @@
    appear is set in each planet file (palette.decor).
    ===================================================================== */
 
-Game.world = { cellWidth: 520, cellDepth: 420, perCell: 4, viewDepth: 2700, behindDepth: 90 };
+Game.world = { cellWidth: 520, cellDepth: 420, perCell: 4, viewDepth: 2700, behindDepth: 90,
+  // Things lying FLAT on the ground. They are drawn first, so nothing standing up is ever covered by them.
+  flatTypes: { cloud: true, dust: true, crater: true, specks: true, pebbles: true, redDot: true, ring: true } };
 
 // Make (or get from memory) the decorations of one cell.
 Game.world.getCell = function (level, cellX, cellZ) {
@@ -71,7 +73,13 @@ Game.world.collectDrawables = function (level) {
     if (!level.objects[i].hidden) { list.push(level.objects[i]); }
   }
   list.push({ type: "__player__", z: level.worldZ, x: level.worldX });
-  list.sort(function (a, b) { return b.z - a.z; });      // far first, near last
+  // Flat things first, then standing things. Inside each group: far first, near last.
+  list.sort(function (a, b) {
+    const groupA = Game.world.flatTypes[a.type] ? 0 : 1;
+    const groupB = Game.world.flatTypes[b.type] ? 0 : 1;
+    if (groupA !== groupB) { return groupA - groupB; }
+    return b.z - a.z;
+  });
   return list;
 };
 
