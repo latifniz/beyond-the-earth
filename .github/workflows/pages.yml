@@ -1,0 +1,52 @@
+# Publishes BOTH versions of the game on GitHub Pages, side by side:
+#   https://latifniz.github.io/beyond-the-earth/            -> the "main" branch (original 2D version)
+#   https://latifniz.github.io/beyond-the-earth/realistic/  -> the "realistic-graphics" branch (3D version)
+# It runs every time either branch is pushed (or when you press "Run workflow" on the Actions tab).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, realistic-graphics]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Get the main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main-site
+
+      - name: Get the realistic-graphics branch
+        uses: actions/checkout@v4
+        with:
+          ref: realistic-graphics
+          path: realistic-site
+
+      - name: Put both versions in one folder
+        run: |
+          mkdir _site
+          rsync -a --exclude '.git' --exclude '.github' main-site/ _site/
+          mkdir _site/realistic
+          rsync -a --exclude '.git' --exclude '.github' realistic-site/ _site/realistic/
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
