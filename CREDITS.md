@@ -3,7 +3,7 @@
 ## Pictures made by the team
 Made by the team (AI-assisted) and only cropped / resized / recolored by us for the game:
 `teacher.png`, `student.png`, the astronaut suits (front and back), `intro-bg.jpg` (from `background.jpg`), `lab-bg.jpg` (from `spaceStation.png`), `stone.png`.
-The **purple** suit is the team's orange suit with its orange colors shifted to purple by a small script (see DECISIONS.md).
+The **purple** suit is the team's orange suit with its orange colors shifted to purple by a small script.
 
 ## NASA images (downloaded from the NASA Image and Video Library, https://images.nasa.gov)
 NASA media are generally not copyrighted; NASA asks us to credit NASA. Please re-check the NASA media usage guidelines (https://www.nasa.gov/nasa-brand-center/images-and-media/) before publishing.
