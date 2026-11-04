@@ -1,0 +1,13 @@
+/* =====================================================================
+   FILE: css/travel.css
+   WHAT IT DOES: Look of the TRAVEL ANIMATION screen texts (the animation
+   itself is drawn on the canvas by js/screens/travel.js).
+   WHO EDITS: Aasiya.
+   ===================================================================== */
+
+#travel-canvas { position: absolute; inset: 0; background: #090421; }
+.travel-text { position: absolute; left: 44px; bottom: 44px; font-family: var(--font-heading); font-size: 38px; color: var(--white);
+  text-shadow: 0 0 18px rgba(170,120,255,0.9); transition: opacity 0.4s; }
+.travel-fact { position: absolute; left: 44px; bottom: 100px; width: 640px; font-size: 17px; line-height: 1.45; color: var(--pale-violet);
+  opacity: 0; transition: opacity 0.8s; }
+.travel-fact.show { opacity: 0.95; }

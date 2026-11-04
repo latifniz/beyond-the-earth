@@ -1,0 +1,21 @@
+/* =====================================================================
+   FILE: css/destination.css
+   WHAT IT DOES: Look of the CHOOSE YOUR DESTINATION screen: three equal
+   planet cards in one row. Locked cards are faded with a lock icon.
+   WHO EDITS: Aasiya.
+   ===================================================================== */
+
+.planet-row { position: absolute; left: 0; right: 0; top: 190px; display: flex; justify-content: center; gap: 48px; }
+.planet-card { position: relative; width: 320px; height: 430px; padding: 30px 24px; text-align: center; cursor: pointer;
+  background: var(--card-gradient); border: var(--card-border); border-radius: 24px; box-shadow: var(--glow);
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s; }
+.planet-card:hover { transform: translateY(-8px); box-shadow: 0 0 40px rgba(215,65,255,0.8); }
+.planet-card img { width: 230px; height: 230px; object-fit: contain; filter: drop-shadow(0 0 22px rgba(160,120,255,0.55)); }
+.planet-card h3 { margin-top: 22px; font-size: 40px; }
+.planet-card p { margin-top: 6px; font-size: 20px; font-weight: 600; color: var(--sky-blue); }
+.planet-card .lock { display: none; position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); font-size: 64px; }
+/* A locked card is faded, shows a lock, and cannot be clicked. */
+.planet-card.locked { opacity: 0.45; filter: grayscale(0.55); cursor: not-allowed; }
+.planet-card.locked:hover { transform: none; box-shadow: var(--glow); }
+.planet-card.locked .lock { display: block; }
+.planet-card.done::after { content: "✔"; position: absolute; right: 18px; top: 12px; font-size: 30px; color: var(--green); }

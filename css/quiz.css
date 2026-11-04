@@ -1,0 +1,37 @@
+/* =====================================================================
+   FILE: css/quiz.css
+   WHAT IT DOES: Look of the QUIZ, the result card and the final celebration screen.
+   WHO EDITS: Aasiya.
+   ===================================================================== */
+
+.quiz-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 960px; padding: 30px 44px; }
+.quiz-progress { font-size: 16px; font-weight: 700; color: var(--sky-blue); letter-spacing: 1px; margin-bottom: 8px; }
+#quiz-question { font-size: 30px; line-height: 1.25; margin-bottom: 22px; }
+.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.quiz-option { text-align: left; padding: 16px 20px; font-size: 18px; font-weight: 600; font-family: var(--font-body); color: var(--white); cursor: pointer;
+  background: rgba(255,255,255,0.1); border: 2px solid rgba(190,150,255,0.6); border-radius: 16px; transition: background 0.2s, transform 0.15s; }
+.quiz-option:hover:not(:disabled) { background: rgba(190,120,255,0.35); transform: translateY(-2px); }
+.quiz-option:disabled { cursor: default; }
+.quiz-option.right { background: rgba(47,211,107,0.35); border-color: var(--green); }
+.quiz-option.wrong { background: rgba(255,77,94,0.35); border-color: var(--red); }
+.quiz-feedback { margin-top: 20px; padding: 14px 20px; border-radius: 14px; background: rgba(0,0,0,0.28); animation: pop-in 0.3s ease; }
+#quiz-verdict { font-family: var(--font-heading); font-size: 28px; }
+#quiz-verdict.right { color: var(--green); }
+#quiz-verdict.wrong { color: var(--red); }
+#quiz-explanation { margin-top: 6px; font-size: 17px; line-height: 1.45; color: var(--pale-violet); }
+#quiz-next { margin-top: 18px; float: right; }
+
+.quiz-result { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 620px; padding: 44px; text-align: center; animation: pop-in 0.4s ease; }
+.quiz-result h2 { font-size: 56px; }
+.quiz-result p { margin-top: 12px; font-size: 22px; color: var(--pale-violet); }
+.result-stars { margin: 22px 0 28px; font-size: 56px; letter-spacing: 10px; }
+
+.finale-box { position: absolute; left: 0; right: 0; top: 110px; text-align: center; }
+.finale-box h2 { font-size: 78px; color: var(--white); text-shadow: 0 0 30px rgba(215,65,255,0.8); }
+.finale-box p { margin-top: 14px; font-size: 26px; color: var(--pale-violet); }
+.finale-planets { display: flex; justify-content: center; gap: 36px; margin: 38px 0 44px; }
+.finale-planets img { width: 150px; height: 150px; animation: float-planet 3s ease-in-out infinite; }
+.finale-planets img:nth-child(2) { animation-delay: -1s; }
+.finale-planets img:nth-child(3) { animation-delay: -2s; }
+.finale-box .btn { margin: 0 10px; }
+@keyframes float-planet { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }

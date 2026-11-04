@@ -1,0 +1,56 @@
+/* =====================================================================
+   FILE: css/level.css
+   WHAT IT DOES: Look of all the HTML on top of a planet level: title bar,
+   Missions button and list, progress bar, controls, INTERACT box, lake view,
+   camera view.
+   WHO EDITS: Aasiya.
+   ===================================================================== */
+
+#level-canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+.level-bar { position: absolute; top: 0; left: 0; right: 0; height: 76px; padding: 0 28px; display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(180deg, rgba(25,8,70,0.9), rgba(50,20,120,0.55)); border-bottom: 1px solid rgba(190,150,255,0.5); z-index: 10; }
+.level-bar h2 { font-size: 30px; line-height: 1; }
+.level-bar p { margin-top: 6px; font-size: 15px; color: var(--sky-blue); font-weight: 600; }
+
+#missions-panel { position: absolute; right: 28px; top: 88px; width: 360px; padding: 18px 22px; z-index: 12; }
+#missions-panel h3 { font-size: 24px; margin-bottom: 10px; }
+#missions-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+#missions-list li { display: flex; gap: 12px; align-items: center; font-size: 16px; font-weight: 600; }
+.checkbox { flex: none; width: 26px; height: 26px; border: 2px solid var(--white); border-radius: 6px; text-align: center; line-height: 22px; font-size: 18px; }
+.checkbox.done { background: var(--green); border-color: var(--green); color: #fff; }
+
+/* Vertical progress bar on the right edge */
+.progress-bar { position: absolute; right: 22px; top: 190px; width: 24px; height: 340px; border-radius: 14px; background: rgba(255,255,255,0.22);
+  border: 2px solid rgba(255,255,255,0.7); overflow: hidden; display: flex; align-items: flex-end; z-index: 9; }
+.progress-fill { width: 100%; height: 0%; background: linear-gradient(0deg, #1fbf5b, #55f08a); transition: height 0.6s ease; }
+.progress-label { position: absolute; right: 8px; top: 540px; width: 80px; text-align: center; font-size: 14px; font-weight: 700; text-shadow: 0 1px 6px #000; z-index: 9; }
+
+.hint-text { position: absolute; left: 50%; top: 92px; transform: translateX(-50%); width: max-content; max-width: 700px; text-align: center; font-size: 17px; font-weight: 600; z-index: 9;
+  background: rgba(30,10,80,0.6); border-radius: 999px; padding: 8px 22px; pointer-events: none; }
+.hint-text:empty { display: none; }
+
+.interact-box { position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); padding: 16px 28px; text-align: center; z-index: 12;
+  display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.interact-box p { font-size: 18px; font-weight: 600; }
+#send-button { position: absolute; left: 50%; bottom: 60px; transform: translateX(-50%); z-index: 12; font-size: 28px; padding: 16px 46px; animation: pulse-glow 1.4s infinite; }
+@keyframes pulse-glow { 0%,100% { box-shadow: 0 0 18px rgba(215,65,255,0.5); } 50% { box-shadow: 0 0 42px rgba(215,65,255,1); } }
+
+/* On-screen controls at the bottom-right */
+.controls { position: absolute; right: 26px; bottom: 24px; display: flex; gap: 12px; align-items: flex-end; z-index: 11; }
+.ctrl { width: 74px; height: 74px; border-radius: 50%; font-family: var(--font-heading); font-size: 28px; color: #fff; cursor: pointer; touch-action: none;
+  background: rgba(60, 25, 130, 0.78); border: 2px solid var(--neon-magenta); box-shadow: var(--glow); }
+.ctrl:active, .ctrl.pressed { background: var(--violet); transform: scale(0.94); }
+.ctrl-jump { width: 104px; border-radius: 40px; font-size: 22px; }
+#screen-level .btn-back { z-index: 11; }
+
+/* Mars lake view and Venus camera view */
+.lake-view, .camera-view { position: absolute; inset: 0; z-index: 30; }
+.lake-view canvas, .camera-view canvas { position: absolute; inset: 0; }
+.lake-text { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; font-family: var(--font-heading); font-size: 32px; padding: 0 140px;
+  text-shadow: 0 3px 14px #000; }
+.camera-instruction { position: absolute; top: 34px; left: 0; right: 0; text-align: center; font-family: var(--font-heading); font-size: 34px; text-shadow: 0 3px 14px #000; }
+.camera-count { position: absolute; top: 94px; left: 0; right: 0; text-align: center; font-size: 22px; font-weight: 700; text-shadow: 0 2px 8px #000; }
+.capture-button { position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%); font-size: 30px; padding: 16px 54px; background: linear-gradient(135deg,#ff4d5e,#c4162a); border-color: #fff; }
+.camera-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.camera-flash.go { animation: flash 0.35s ease-out; }
+@keyframes flash { 0% { opacity: 1; } 100% { opacity: 0; } }

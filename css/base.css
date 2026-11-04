@@ -1,0 +1,67 @@
+/* =====================================================================
+   FILE: css/base.css
+   WHAT IT DOES: The basic rules for the whole game: the fixed 16:9 stage,
+   screen fade in/out, and the shared button / card / popup styles.
+   WHO EDITS: Aasiya (look), Hadia (stage scaling).
+   ===================================================================== */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; background: #05031a; overflow: hidden;
+  font-family: var(--font-body); color: var(--white); user-select: none; -webkit-user-select: none; }
+
+/* The stage is always 1280 x 720. game.js scales it to fit the window. */
+#stage-wrapper { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+#stage { position: relative; width: 1280px; height: 720px; flex: none; overflow: hidden;
+  transform-origin: center center; background: var(--night); }
+
+/* Every screen fills the stage; only the one with class "visible" is shown. */
+.screen { position: absolute; inset: 0; z-index: 1; opacity: 0; visibility: hidden;
+  transition: opacity 0.45s ease, visibility 0s linear 0.45s; }
+.screen.visible { opacity: 1; visibility: visible; transition: opacity 0.45s ease; }
+.screen .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.gradient-screen { background: var(--screen-gradient); }
+/* Settings and About sit above the lab (the lab stays alive underneath). */
+#screen-settings, #screen-about { z-index: 2; }
+.hidden { display: none !important; }
+
+h1, h2, h3 { font-family: var(--font-heading); font-weight: 700; }
+
+/* ----- buttons: every button in the game uses one of these ----- */
+.btn { font-family: var(--font-heading); font-weight: 700; font-size: 24px; color: var(--white);
+  padding: 12px 34px; border-radius: var(--radius-pill); cursor: pointer;
+  background: var(--button-gradient); border: 2px solid var(--neon-magenta);
+  box-shadow: var(--glow); transition: transform 0.15s, box-shadow 0.15s, filter 0.15s; }
+.btn:hover { transform: translateY(-2px) scale(1.04); filter: brightness(1.12); }
+.btn:active { transform: scale(0.96); }
+.btn-small { font-size: 18px; padding: 8px 22px; }
+.btn-back { position: absolute; left: 28px; bottom: 28px; font-size: 20px; padding: 10px 28px; }
+.btn-next { position: absolute; right: 40px; bottom: 34px; }
+.icon-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.35);
+  color: var(--white); border-radius: 12px; font-size: 22px; padding: 6px 12px; cursor: pointer; }
+.icon-btn:hover { background: rgba(255,255,255,0.25); }
+
+/* ----- cards and screen headings ----- */
+.glass-card { background: var(--glass); border: var(--card-border); border-radius: var(--radius);
+  box-shadow: var(--glow); backdrop-filter: blur(6px); }
+.screen-heading { position: absolute; top: 34px; left: 0; right: 0; text-align: center; }
+.screen-heading h2 { font-size: 46px; letter-spacing: 1px; }
+.screen-heading p { margin-top: 8px; font-size: 20px; color: var(--pale-violet); }
+
+/* ----- pop-up (used for "All Missions Complete", caution, etc.) ----- */
+.popup-layer { position: absolute; inset: 0; background: rgba(8, 3, 30, 0.6);
+  display: flex; align-items: center; justify-content: center; z-index: 60; }
+.popup { width: 640px; padding: 34px 40px; text-align: center; background: linear-gradient(160deg,#5a2bb5,#3a1587);
+  animation: pop-in 0.35s ease; }
+.popup h3 { font-size: 36px; margin-bottom: 12px; }
+.popup p { font-size: 21px; line-height: 1.5; margin-bottom: 24px; color: var(--pale-violet); }
+@keyframes pop-in { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ----- small helpers ----- */
+.twinkle-stars { position: absolute; inset: 0; pointer-events: none; }
+.toast { position: absolute; left: 50%; top: 150px; transform: translateX(-50%); padding: 10px 26px;
+  background: var(--glass); border: var(--card-border); border-radius: var(--radius-pill);
+  font-weight: 700; font-size: 20px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 40; }
+.toast.show { opacity: 1; }
+#demo-panel { position: absolute; left: 8px; top: 84px; z-index: 999; background: rgba(0,0,0,0.75);
+  padding: 8px; border-radius: 10px; display: flex; gap: 6px; flex-wrap: wrap; width: 330px; font-size: 12px; }
+#demo-panel button { font-size: 12px; padding: 4px 8px; cursor: pointer; }

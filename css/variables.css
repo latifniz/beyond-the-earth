@@ -1,0 +1,56 @@
+/* =====================================================================
+   FILE: css/variables.css
+   WHAT IT DOES: Holds ALL the colors, fonts and sizes of the game as
+   CSS variables. Every other CSS file uses these names, so if you change
+   a color here it changes everywhere.
+   WHO EDITS: Aasiya (graphic designer).
+   HOW TO EDIT: change the value after the colon, e.g. --neon-magenta: #D741FF;
+   ===================================================================== */
+
+/* "Fredoka One" was merged into the font "Fredoka" by Google. We load the
+   Fredoka file under the old name; weight 700 gives the same round letters. */
+@font-face {
+  font-family: "Fredoka One";
+  src: url("../assets/fonts/Fredoka-Variable.ttf") format("truetype");
+  font-weight: 300 700;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("../assets/fonts/Montserrat-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+}
+
+:root {
+  /* ----- main colors ----- */
+  --white: #ffffff;
+  --violet: #7b2ff7;          /* bright violet */
+  --purple: #5b21b6;          /* normal purple (buttons, bubbles) */
+  --deep-purple: #2a0f5c;     /* dark purple (backgrounds) */
+  --navy: #14246b;            /* navy blue (volume fill) */
+  --night: #0b0a2a;           /* almost-black space */
+  --neon-magenta: #d741ff;    /* glowing border of buttons */
+  --sky-blue: #7fd4ff;        /* "THE EARTH", "Mission 1" */
+  --lavender: #d9d4ff;        /* subtitle "Classroom to Cosmos" */
+  --pale-violet: #e6defc;     /* sub-headings and About text */
+  --green: #2fd36b;           /* completed mission box, Correct */
+  --red: #ff4d5e;             /* Wrong, mission marker dot */
+
+  /* ----- gradients ----- */
+  --screen-gradient: linear-gradient(135deg, #2a0f5c 0%, #5a2bb5 50%, #1e3a8a 100%);
+  --button-gradient: linear-gradient(135deg, #8a2cf5, #5b21b6);
+  --card-gradient: linear-gradient(160deg, #2b1a6b, #14164f);
+  --glass: rgba(28, 12, 70, 0.62);
+
+  /* ----- glows and borders ----- */
+  --glow: 0 0 22px rgba(215, 65, 255, 0.55);
+  --card-border: 2px solid rgba(170, 110, 255, 0.75);
+
+  /* ----- fonts ----- */
+  --font-heading: "Fredoka One", "Fredoka", "Trebuchet MS", sans-serif;
+  --font-body: "Montserrat", "Inter", "Segoe UI", Arial, sans-serif;
+
+  /* ----- sizes ----- */
+  --radius: 18px;
+  --radius-pill: 999px;
+  --title-size: 118px;
+}

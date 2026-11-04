@@ -1,0 +1,41 @@
+/* =====================================================================
+   FILE: css/lab.css
+   WHAT IT DOES: Look of the LAB screen: header bar, the two characters
+   standing on the floor, purple speech bubbles, the "Let's go" button.
+   WHO EDITS: Aasiya. To move a character, change "left" and "height".
+   ===================================================================== */
+
+.top-bar { position: absolute; top: 0; left: 0; right: 0; height: 78px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 26px; z-index: 10;
+  background: linear-gradient(180deg, rgba(30,10,80,0.88), rgba(50,20,120,0.62)); border-bottom: 1px solid rgba(190,150,255,0.5); }
+.top-left { display: flex; align-items: center; gap: 14px; }
+.saturn-icon { width: 76px; height: auto; filter: drop-shadow(0 0 10px rgba(160,120,255,0.8)); }
+.top-left h2 { font-size: 27px; color: var(--white); letter-spacing: 1.5px; line-height: 1; }
+.top-left p { margin-top: 6px; font-size: 14px; color: var(--pale-violet); }
+.top-right { display: flex; gap: 18px; }
+.top-right .icon-btn { font-size: 18px; font-family: var(--font-body); font-weight: 600; padding: 9px 18px; }
+
+/* Characters stand on the floor circle. "bottom" is the distance from the stage bottom to their feet. */
+.character { position: absolute; bottom: 124px; transform-origin: 50% 100%; animation: breathe 3.6s ease-in-out infinite; }
+.character img { display: block; filter: drop-shadow(0 10px 8px rgba(10,0,50,0.5)); }
+.character.teacher { left: 372px; }
+.character.teacher img { height: 470px; }
+.character.student { left: 700px; animation-delay: -1.7s; }
+.character.student img { height: 420px; }
+.character.speaking img { animation: nod 0.5s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+@keyframes breathe { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.012) translateY(-1px); } }
+@keyframes nod { from { transform: rotate(-0.4deg); } to { transform: rotate(0.5deg); } }
+
+/* Speech bubbles: purple with white text, beside the speaker (not over her head). */
+.bubble-column { position: absolute; top: 215px; width: 300px; display: flex; flex-direction: column; align-items: center; gap: 14px; z-index: 8; }
+.bubble-column-teacher { left: 60px; }
+.bubble-column-student { left: 925px; }
+.bubble { position: relative; width: 100%; padding: 16px 20px; border-radius: 22px; font-size: 17px; line-height: 1.4; font-weight: 500;
+  color: var(--white); background: linear-gradient(160deg, #6a2fd0, #4a1d9c); border: 2px solid rgba(215,160,255,0.8);
+  box-shadow: 0 6px 24px rgba(30,0,90,0.6); opacity: 0; transform: translateY(8px) scale(0.96); pointer-events: none;
+  transition: opacity 0.35s, transform 0.35s; }
+.bubble.show { opacity: 1; transform: none; }
+.bubble-teacher::after, .bubble-student::after { content: ""; position: absolute; top: 46px; width: 18px; height: 18px; background: #5a25b8; transform: rotate(45deg); }
+.bubble-teacher::after { right: -10px; border-top: 2px solid rgba(215,160,255,0.8); border-right: 2px solid rgba(215,160,255,0.8); }
+.bubble-student::after { left: -10px; border-bottom: 2px solid rgba(215,160,255,0.8); border-left: 2px solid rgba(215,160,255,0.8); }
+.btn-lets-go { color: #000; font-size: 22px; padding: 10px 34px; background: linear-gradient(135deg, #b98bff, #8a4dff); border-color: #e1c8ff; animation: pop-in 0.4s ease; }

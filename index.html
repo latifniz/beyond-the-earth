@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!--
+  FILE: index.html
+  WHAT IT DOES: The one page of the game. It holds the skeleton (HTML) of every
+  screen. The words come from js/data/text.js (elements with data-text="...").
+  The look comes from the css/ folder. The behaviour comes from the js/ folder.
+  HOW TO RUN: just double-click this file (works offline, no server needed).
+  WHAT TO CHANGE: add/move boxes here; change words in text.js; colors in css/variables.css.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beyond The Earth: Classroom to Cosmos</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/intro.css">
+  <link rel="stylesheet" href="css/lab.css">
+  <link rel="stylesheet" href="css/settings.css">
+  <link rel="stylesheet" href="css/customize.css">
+  <link rel="stylesheet" href="css/destination.css">
+  <link rel="stylesheet" href="css/travel.css">
+  <link rel="stylesheet" href="css/level.css">
+  <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+<div id="stage-wrapper">
+<div id="stage">
+
+  <!-- ===== LOADING SCREEN ===== -->
+  <section id="screen-loading" class="screen gradient-screen">
+    <h2 id="loading-title" data-text="loading.title"></h2>
+    <div id="loading-track"><div id="loading-fill"></div></div>
+  </section>
+
+  <!-- ===== 1. INTRO SCREEN ===== -->
+  <section id="screen-intro" class="screen">
+    <img class="bg" src="assets/images/intro-bg.jpg" alt="">
+    <div class="intro-shade"></div>
+    <canvas id="intro-stars" width="1280" height="720"></canvas>
+    <div class="intro-content">
+      <h1 class="title">
+        <span class="title-line1" data-text="intro.line1"></span>
+        <span class="title-line2" data-text="intro.line2"></span>
+      </h1>
+      <p class="subtitle" data-text="intro.subtitle"></p>
+      <p class="tagline" data-text="intro.tagline"></p>
+      <button id="play-button" class="btn btn-play"><span class="play-icon">▶</span><span data-text="intro.play"></span></button>
+    </div>
+    <button id="intro-fullscreen" class="icon-btn corner-btn" title="Fullscreen">⛶</button>
+  </section>
+
+  <!-- ===== 2. LAB SCREEN ===== -->
+  <section id="screen-lab" class="screen">
+    <img class="bg" src="assets/images/lab-bg.jpg" alt="">
+    <header class="top-bar">
+      <div class="top-left">
+        <img class="saturn-icon" src="assets/images/planets/saturn.png" alt="">
+        <div>
+          <h2 data-text="lab.headerTitle"></h2>
+          <p data-text="lab.headerSub"></p>
+        </div>
+      </div>
+      <div class="top-right">
+        <button id="open-settings" class="icon-btn">⚙ <span data-text="lab.settings"></span></button>
+        <button id="open-about" class="icon-btn">ⓘ <span data-text="lab.about"></span></button>
+      </div>
+    </header>
+    <div class="character teacher"><img id="teacher-img" src="assets/images/teacher.png" alt="Teacher"></div>
+    <div class="character student"><img id="student-img" src="assets/images/student.png" alt="Student"></div>
+    <div class="bubble-column bubble-column-teacher">
+      <div id="bubble-teacher" class="bubble bubble-teacher"></div>
+      <button id="lets-go-button" class="btn btn-lets-go hidden" data-text="lab.letsGo"></button>
+    </div>
+    <div class="bubble-column bubble-column-student">
+      <div id="bubble-student" class="bubble bubble-student"></div>
+    </div>
+  </section>
+
+  <!-- ===== 3. SETTINGS SCREEN ===== -->
+  <section id="screen-settings" class="screen gradient-screen">
+    <h2 class="screen-title" data-text="settings.title"></h2>
+    <div class="settings-box glass-card">
+      <div class="settings-row">
+        <span class="settings-label" data-text="settings.sound"></span>
+        <button id="sound-toggle" class="toggle on"><span id="sound-toggle-text"></span></button>
+      </div>
+      <div class="settings-row">
+        <span class="settings-label" data-text="settings.volume"></span>
+        <div id="volume-line" class="volume-line"><div id="volume-fill" class="volume-fill"></div><div id="volume-knob" class="volume-knob"></div></div>
+      </div>
+      <div class="settings-row">
+        <span class="settings-label" data-text="settings.fullscreen"></span>
+        <button id="settings-fullscreen" class="icon-btn">⛶</button>
+      </div>
+    </div>
+    <button class="btn btn-back" id="settings-back" data-text="settings.back"></button>
+  </section>
+
+  <!-- ===== 4. ABOUT SCREEN ===== -->
+  <section id="screen-about" class="screen gradient-screen">
+    <h2 class="screen-title" data-text="about.title"></h2>
+    <div id="about-box" class="about-box"></div>
+    <button class="btn btn-back" id="about-back" data-text="about.back"></button>
+  </section>
+
+  <!-- ===== 5. CHARACTER CUSTOMIZATION ===== -->
+  <section id="screen-customize" class="screen gradient-screen">
+    <canvas class="twinkle-stars" id="customize-stars" width="1280" height="720"></canvas>
+    <div class="screen-heading">
+      <h2 data-text="customize.title"></h2>
+      <p data-text="customize.subtitle"></p>
+    </div>
+    <div class="suit-list">
+      <div class="suit-card glass-card clickable" data-suit="white-blue"><canvas width="170" height="390"></canvas><span></span></div>
+      <div class="suit-card glass-card clickable" data-suit="purple"><canvas width="170" height="390"></canvas><span></span></div>
+      <div class="suit-card glass-card clickable" data-suit="pink"><canvas width="170" height="390"></canvas><span></span></div>
+    </div>
+    <div class="suit-big glass-card"><canvas id="suit-big-canvas" width="520" height="520"></canvas></div>
+    <button id="customize-next" class="btn btn-next" data-text="customize.next"></button>
+  </section>
+
+  <!-- ===== 6. DESTINATION ===== -->
+  <section id="screen-destination" class="screen gradient-screen">
+    <canvas class="twinkle-stars" id="destination-stars" width="1280" height="720"></canvas>
+    <div class="screen-heading">
+      <h2 data-text="destination.title"></h2>
+      <p data-text="destination.subtitle"></p>
+    </div>
+    <div class="planet-row">
+      <div class="planet-card clickable" data-planet="moon"><img src="assets/images/planets/moon.png" alt="Moon"><h3>Moon</h3><p></p><span class="lock">🔒</span></div>
+      <div class="planet-card clickable" data-planet="mars"><img src="assets/images/planets/mars.png" alt="Mars"><h3>Mars</h3><p></p><span class="lock">🔒</span></div>
+      <div class="planet-card clickable" data-planet="venus"><img src="assets/images/planets/venus.png" alt="Venus"><h3>Venus</h3><p></p><span class="lock">🔒</span></div>
+    </div>
+    <button id="destination-back" class="btn btn-back" data-text="destination.back"></button>
+  </section>
+
+  <!-- ===== 7. TRAVEL ANIMATION ===== -->
+  <section id="screen-travel" class="screen">
+    <canvas id="travel-canvas" width="1280" height="720"></canvas>
+    <div id="travel-text" class="travel-text"></div>
+    <div id="travel-fact" class="travel-fact"></div>
+    <button id="travel-skip" class="icon-btn corner-btn" data-text="travel.skip"></button>
+    <div id="caution-layer" class="popup-layer hidden">
+      <div class="popup glass-card"><h3 data-text="travel.venusCautionTitle"></h3><p data-text="travel.venusCaution"></p>
+        <button id="caution-ok" class="btn" data-text="travel.ok"></button></div>
+    </div>
+  </section>
+
+  <!-- ===== 8. PLANET LEVEL (Moon, Mars, Venus) ===== -->
+  <section id="screen-level" class="screen">
+    <canvas id="level-canvas" width="1280" height="720"></canvas>
+    <header class="level-bar">
+      <div><h2 id="level-title"></h2><p id="level-subtitle"></p></div>
+      <button id="missions-button" class="btn btn-small" data-text="level.missions"></button>
+    </header>
+    <div id="missions-panel" class="glass-card hidden"><h3 data-text="level.missionsTitle"></h3><ul id="missions-list"></ul></div>
+    <div id="progress-bar" class="progress-bar hidden"><div id="progress-fill" class="progress-fill"></div></div>
+    <div id="progress-label" class="progress-label hidden"></div>
+    <div id="hint-text" class="hint-text"></div>
+    <div id="interact-box" class="interact-box glass-card hidden"><p id="interact-message"></p><button id="interact-button" class="btn"></button></div>
+    <button id="send-button" class="btn hidden" data-text="level.sendToEarth"></button>
+    <div id="controls" class="controls">
+      <button id="btn-left" class="ctrl">◀</button>
+      <button id="btn-forward" class="ctrl">▲</button>
+      <button id="btn-right" class="ctrl">▶</button>
+      <button id="btn-jump" class="ctrl ctrl-jump" data-text="level.controls.jump"></button>
+    </div>
+    <button id="level-back" class="btn btn-back" data-text="level.back"></button>
+    <div id="lake-view" class="lake-view hidden"><canvas id="lake-canvas" width="1280" height="720"></canvas><div id="lake-text" class="lake-text"></div></div>
+    <div id="camera-view" class="camera-view hidden"><canvas id="camera-canvas" width="1280" height="720"></canvas>
+      <div id="camera-instruction" class="camera-instruction"></div><div id="camera-count" class="camera-count"></div>
+      <button id="capture-button" class="btn capture-button">CAPTURE</button><div id="camera-flash" class="camera-flash"></div></div>
+    <div id="popup-layer" class="popup-layer hidden">
+      <div class="popup glass-card"><h3 id="popup-title"></h3><p id="popup-text"></p><button id="popup-button" class="btn"></button></div>
+    </div>
+  </section>
+
+  <!-- ===== 9. QUIZ ===== -->
+  <section id="screen-quiz" class="screen gradient-screen">
+    <canvas class="twinkle-stars" id="quiz-stars" width="1280" height="720"></canvas>
+    <div class="quiz-box glass-card">
+      <div id="quiz-progress" class="quiz-progress"></div>
+      <h3 id="quiz-question"></h3>
+      <div id="quiz-options" class="quiz-options"></div>
+      <div id="quiz-feedback" class="quiz-feedback hidden"><div id="quiz-verdict"></div><p id="quiz-explanation"></p></div>
+      <button id="quiz-next" class="btn hidden"></button>
+    </div>
+    <div id="quiz-result" class="quiz-result glass-card hidden">
+      <h2 id="result-message"></h2><p id="result-score"></p><div id="result-stars" class="result-stars"></div>
+      <button id="quiz-back" class="btn" data-text="quiz.back"></button>
+    </div>
+  </section>
+
+  <!-- ===== 10. FINAL CELEBRATION ===== -->
+  <section id="screen-finale" class="screen gradient-screen">
+    <canvas class="twinkle-stars" id="finale-stars" width="1280" height="720"></canvas>
+    <div class="finale-box">
+      <h2 data-text="finale.title"></h2><p data-text="finale.text"></p>
+      <div class="finale-planets"><img src="assets/images/planets/moon.png" alt=""><img src="assets/images/planets/mars.png" alt=""><img src="assets/images/planets/venus.png" alt=""></div>
+      <button id="finale-again" class="btn" data-text="finale.playAgain"></button>
+      <button id="finale-back" class="btn" data-text="finale.back"></button>
+    </div>
+  </section>
+
+  <div id="toast" class="toast"></div>
+</div>
+</div>
+
+<!-- Scripts are loaded in this exact order. game.js must be first. No modules (so it works from file://). -->
+<script src="js/core/game.js"></script>
+<script src="js/data/config.js"></script>
+<script src="js/data/text.js"></script>
+<script src="js/data/quizzes.js"></script>
+<script src="js/core/save.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/core/voice.js"></script>
+<script src="js/core/stars.js"></script>
+<script src="js/drawing/astronaut.js"></script>
+<script src="js/drawing/spacecraft.js"></script>
+<script src="js/drawing/terrain.js"></script>
+<script src="js/drawing/props.js"></script>
+<script src="js/drawing/props_objects.js"></script>
+<script src="js/screens/intro.js"></script>
+<script src="js/screens/lab.js"></script>
+<script src="js/screens/settings.js"></script>
+<script src="js/screens/about.js"></script>
+<script src="js/screens/customize.js"></script>
+<script src="js/screens/destination.js"></script>
+<script src="js/screens/travel.js"></script>
+<script src="js/levels/world.js"></script>
+<script src="js/levels/effects.js"></script>
+<script src="js/levels/hud.js"></script>
+<script src="js/levels/cutscene.js"></script>
+<script src="js/levels/missions.js"></script>
+<script src="js/levels/walker.js"></script>
+<script src="js/levels/controls.js"></script>
+<script src="js/levels/moon.js"></script>
+<script src="js/levels/mars.js"></script>
+<script src="js/levels/venus.js"></script>
+<script src="js/levels/venus_camera.js"></script>
+<script src="js/screens/quiz.js"></script>
+<script src="js/screens/finale.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

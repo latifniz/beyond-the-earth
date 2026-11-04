@@ -1,0 +1,30 @@
+/* =====================================================================
+   FILE: css/intro.css
+   WHAT IT DOES: Look of the INTRO screen: the logo-like title block,
+   subtitle, tagline and the PLAY NOW button.
+   WHO EDITS: Aasiya. Sizes are in px; the stage is 1280 x 720.
+   ===================================================================== */
+
+#screen-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; }
+#loading-title { font-size: 40px; }
+#loading-track { width: 420px; height: 14px; border-radius: 10px; background: rgba(255,255,255,0.2); overflow: hidden; }
+#loading-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--violet), var(--sky-blue)); transition: width 0.2s; }
+
+#screen-intro canvas { position: absolute; inset: 0; pointer-events: none; }
+.intro-shade { position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 46%, rgba(10,6,50,0.62) 0%, rgba(10,6,50,0.15) 62%, transparent 85%); }
+.intro-content { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; padding-bottom: 10px; }
+
+/* The two title lines sit almost touching, like one logo. */
+.title { display: flex; flex-direction: column; align-items: center; line-height: 0.82;
+  text-shadow: 0 6px 30px rgba(80, 40, 200, 0.55); }
+.title-line1 { font-size: var(--title-size); color: var(--white); letter-spacing: 1px; }
+/* Line 2 is smaller but has wider letter-spacing; intro.js fine-tunes the spacing so both lines are the same width. */
+.title-line2 { font-size: calc(var(--title-size) * 0.7); color: var(--sky-blue); letter-spacing: 6px; }
+
+.subtitle { margin-top: 30px; font-family: var(--font-heading); font-weight: 500; font-size: 30px; color: var(--lavender); letter-spacing: 1px; }
+.tagline { margin-top: 38px; font-size: 21px; font-weight: 500; color: var(--white); text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.btn-play { margin-top: 38px; display: flex; align-items: center; gap: 14px; font-size: 30px; padding: 16px 52px; letter-spacing: 1px; }
+.play-icon { font-size: 24px; }
+.corner-btn { position: absolute; right: 22px; top: 18px; z-index: 5; }
