@@ -171,6 +171,9 @@ Game.audio.play = function (name) {
   } else if (name === "send") {
     a.tone(500, 1.2, "sine", 0.3, 0, 1800);
     a.tone(750, 1.2, "sine", 0.2, 0.15, 2200);
+  } else if (name === "scan") {
+    a.tone(400, 1.8, "sine", 0.1, 0, 1500);           // a soft rising "scanner" sweep
+    a.tone(800, 1.8, "triangle", 0.04, 0.1, 1900);
   } else if (name === "land") {
     a.noiseBurst(1, "lowpass", 600, 150, 0.12);
     a.tone(90, 0.8, "sine", 0.2, 0.4, 40);

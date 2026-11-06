@@ -44,8 +44,9 @@ Game.missions.activateStage = function (level) {
     Game.hud.showProgress(info.label, spots.length);
   } else if (info.kind === "act") {
     level.stage.place = info.place(level);
-    level.stage.mark = { type: info.mark, x: level.stage.place.x, z: level.stage.place.z, size: 150, id: info.id + "mark" };
+    level.stage.mark = { type: info.mark, x: level.stage.place.x, z: level.stage.place.z, size: info.markSize || 150, id: info.id + "mark", isMark: true };
     level.objects.push(level.stage.mark);
+    if (info.scenery) { info.scenery(level, level.stage.place); }      // extra things around the marker (craters, rocks...)
   }
   Game.hud.setHint(info.hint);
 };
@@ -57,7 +58,9 @@ Game.missions.update = function (level) {
   const dx = level.worldX - stage.place.x;
   const dz = level.worldZ - stage.place.z;
   const radius = stage.info.radius || 170;
-  const isNear = Math.sqrt(dx * dx + dz * dz) < radius;
+  // Some stages ("needStop") also want the vehicle to be standing still.
+  const speed = Math.abs(level.speedX) + Math.abs(level.speedZ);
+  const isNear = Math.sqrt(dx * dx + dz * dz) < radius && (!stage.info.needStop || speed < Game.config.rover.stopSpeed);
   if (isNear && !stage.interactShown && !stage.running) {
     stage.interactShown = true;
     Game.audio.play("collect");

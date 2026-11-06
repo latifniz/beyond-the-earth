@@ -80,6 +80,11 @@ Game.planets.moon = {
         prepare: function (level) { level.carryingFlag = true; },     // folded flag on her backpack
         run: function (level, done) { Game.planets.moon.plantFlag(level, done); }
       }]
+    },
+    {
+      // MISSION 3: the lunar rover trip (the stages are written below, in "roverStages")
+      text: Game.text.planets.moon.mission3,
+      stages: null
     }
   ],
 
@@ -120,3 +125,86 @@ Game.planets.moon = {
     ], done);
   }
 };
+
+// ===== MISSION 3: EXPLORE THE MOON WITH THE LUNAR ROVER =====
+// Stage 1: walk to the rover and press E.   Stages 2-4: drive to three markers and press E to scan.
+// Stage 5: drive back to the research station and press E to leave the rover.
+// "place" says where the marker is (relative to where the rover is now).
+// "scenery" adds extra things around the marker. The helpers are in js/levels/rover.js.
+(function () {
+  const text = Game.text.planets.moon;
+  const rover = Game.config.rover;
+
+  // A big crater lying next to the first marker.
+  function craterScenery(level, place) {
+    level.objects.push({ type: "crater", x: place.x + 40, z: place.z + 170, size: 430, id: "giantcrater" });
+  }
+
+  // A wall of rocks that blocks the straight way, and bigger "mountain" rocks around the marker.
+  // The rocks of the wall are also written into level.blockers, so the rover bumps into them.
+  function rocksScenery(level, place) {
+    const wallZ = place.z - 750;
+    const offsets = [-255, -85, 85, 255];
+    for (let i = 0; i < offsets.length; i++) {
+      const size = 185 + (i % 2) * 20;
+      const rock = { type: "rock", x: level.worldX + offsets[i], z: wallZ + (i % 2) * 40, size: size, seed: 40 + i, id: "wallrock" + i };
+      level.objects.push(rock);
+      level.blockers.push({ x: rock.x, z: rock.z, radius: size * 0.47 });
+    }
+    const mountains = [[-430, 220, 300], [-560, 90, 250], [470, 260, 320], [610, 120, 260]];
+    for (let i = 0; i < mountains.length; i++) {
+      level.objects.push({ type: "rock", x: place.x + mountains[i][0], z: place.z + mountains[i][1], size: mountains[i][2], seed: 60 + i, id: "mountain" + i });
+    }
+  }
+
+  // A flag next to the research point.
+  function researchScenery(level, place) {
+    level.objects.push({ type: "flag", x: place.x + 270, z: place.z + 60, size: 170, openAmount: 1, waveAmount: 1, tilt: 0, id: "researchflag" });
+  }
+
+  // The research station stands behind the last marker.
+  function stationScenery(level, place) {
+    level.objects.push({ type: "station", x: place.x, z: place.z + 300, size: 330, id: "station" });
+  }
+
+  // One "drive to the marker and press E to scan" stage.
+  function scanStage(id, hint, message, scannedMessage, place, extra) {
+    const stage = {
+      kind: "act", id: id, mark: "scanPoint", keepMark: true, radius: 190,
+      hint: hint, message: message, button: text.scanButton,
+      place: place,
+      run: function (level, done) { Game.rover.scan(level, scannedMessage, done); }
+    };
+    for (const key in extra) { stage[key] = extra[key]; }
+    return stage;
+  }
+
+  Game.planets.moon.missions[2].stages = [
+    {   // 1. Find the rover and walk to it. (Nothing teleports her: she must walk.)
+      kind: "act", id: "rover", mark: "moonRover", markSize: rover.size, radius: 230,
+      hint: text.hintRover, message: text.roverFound, button: text.enterButton,
+      prepare: function () { Game.hud.showPopup(text.roverIntroTitle, text.roverIntro, text.roverIntroButton, null); },
+      place: function (level) { return { x: level.worldX + 180, z: level.worldZ + 1700 }; },
+      run: function (level, done) { Game.rover.enter(level, done); }
+    },
+    scanStage("crater", text.hintCrater, text.craterMessage, text.craterScanned,
+      function (level) { return { x: level.worldX - 260, z: level.worldZ + 1900 }; },
+      { scenery: craterScenery }),
+    scanStage("rocks", text.hintRocks, text.rocksMessage, text.rocksScanned,
+      function (level) { return { x: level.worldX + 150, z: level.worldZ + 2200 }; },
+      { scenery: rocksScenery, prepare: function (level) { level.blockers = []; } }),
+    scanStage("research", text.hintResearch, text.researchMessage, text.researchScanned,
+      function (level) { return { x: level.worldX - 220, z: level.worldZ + 1900 }; },
+      { scenery: researchScenery, needStop: true, radius: 150,
+        onComplete: function (level) { level.blockers = []; setTimeout(function () { Game.showToast(text.allPointsDone); }, 2300); } }),
+    {   // 5. Drive back to the research station and get out.
+      kind: "act", id: "station", mark: "scanPoint", radius: 210,
+      hint: text.hintStation, message: text.stationMessage, button: text.exitButton,
+      place: function (level) { return { x: level.worldX + 100, z: level.worldZ + 1700 }; },
+      scenery: stationScenery,
+      run: function (level, done) { Game.rover.exit(level, done); }
+    }
+  ];
+
+})();
+

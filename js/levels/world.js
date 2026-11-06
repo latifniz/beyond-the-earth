@@ -12,7 +12,7 @@
 
 Game.world = { cellWidth: 520, cellDepth: 420, perCell: 4, viewDepth: 2700, behindDepth: 90,
   // Things lying FLAT on the ground. They are drawn first, so nothing standing up is ever covered by them.
-  flatTypes: { cloud: true, dust: true, crater: true, specks: true, pebbles: true, redDot: true, ring: true } };
+  flatTypes: { cloud: true, dust: true, crater: true, specks: true, pebbles: true, redDot: true, ring: true, scanPoint: true } };
 
 // Make (or get from memory) the decorations of one cell.
 Game.world.getCell = function (level, cellX, cellZ) {

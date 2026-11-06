@@ -46,6 +46,7 @@ Game.walker.newLevel = function (planet) {
     walkPhase: 0, lastStepSide: 0, facingLeft: false,
     input: { left: false, right: false, forward: false, back: false },
     frozen: false, cutscene: null, pose: null, hand: null, carryingFlag: false,
+    driving: false, roverState: null, blockers: [], hopLift: 0, playerAlpha: 1,       // lunar rover (see rover.js)
     objects: [], cells: {}, effects: [], skyStars: null
   };
 };
@@ -67,10 +68,12 @@ Game.walker.update = function (level, dt) {
   let wantZ = 0;
   let wantX = 0;
   if (!level.frozen) {
-    if (level.input.forward) { wantZ += cfg.walkSpeed; }
-    if (level.input.back) { wantZ -= cfg.walkSpeed * 0.85; }
-    if (level.input.right) { wantX += cfg.sideSpeed; }
-    if (level.input.left) { wantX -= cfg.sideSpeed; }
+    const forwardSpeed = level.driving ? cfg.rover.speed : cfg.walkSpeed;       // the rover is faster than walking
+    const sideSpeed = level.driving ? cfg.rover.sideSpeed : cfg.sideSpeed;
+    if (level.input.forward) { wantZ += forwardSpeed; }
+    if (level.input.back) { wantZ -= forwardSpeed * 0.85; }
+    if (level.input.right) { wantX += sideSpeed; }
+    if (level.input.left) { wantX -= sideSpeed; }
   }
   // Speed eases toward the wish: accelerate when pressing, friction when letting go.
   level.speedZ = Game.walker.approach(level.speedZ, wantZ, (wantZ === 0 ? cfg.friction : cfg.acceleration) * dt);
@@ -84,6 +87,7 @@ Game.walker.update = function (level, dt) {
 
   Game.walker.updateJump(level, dt);
   Game.walker.updateWalkCycle(level, dt);
+  Game.rover.update(level, dt);                  // bumping into rocks, wheels, dust (only when driving)
   if (level.planet.onUpdate) { level.planet.onUpdate(level, dt); }
   Game.missions.update(level);
   Game.effects.update(level, dt);
@@ -95,7 +99,7 @@ Game.walker.update = function (level, dt) {
 // A SMALLER gravity pulls less, so she keeps rising longer and falls slower.
 // That is why the Moon (gravity 380) feels floaty and Venus (900) feels normal.
 Game.walker.startJump = function (level) {
-  if (level.frozen || level.height > 0) { return; }
+  if (level.frozen || level.height > 0 || level.driving) { return; }     // a rover cannot jump
   level.velocityY = Game.config.jump[level.planet.key].jumpSpeed;
   level.height = 0.01;
   Game.audio.play("whoosh");
@@ -120,7 +124,7 @@ Game.walker.updateWalkCycle = function (level, dt) {
   level.isMoving = speed > 25 && level.height === 0;
   if (speed > 25) { level.walkPhase += speed * dt * 0.032; }
   const side = Math.sin(level.walkPhase) > 0 ? 1 : -1;
-  if (level.isMoving && side !== level.lastStepSide) {         // each time a foot lands
+  if (level.isMoving && !level.driving && side !== level.lastStepSide) {         // each time a foot lands
     level.lastStepSide = side;
     Game.audio.play("step");
   }
@@ -141,6 +145,7 @@ Game.walker.chooseView = function (level) {
 
 // ===== DRAW THE ASTRONAUT =====
 Game.walker.drawPlayer = function (ctx, level) {
+  if (level.driving) { Game.rover.drawDriving(ctx, level); return; }     // she is sitting in the rover
   const ground = Game.walker.groundLine;
   const pose = level.pose;
   // Shadow on the ground: smaller and fainter the higher she is.
@@ -148,10 +153,11 @@ Game.walker.drawPlayer = function (ctx, level) {
   // The Sun is on the LEFT, so her shadow falls a little to the RIGHT.
   Game.props.shadow(ctx, 662, ground + 4, 58 * shrink, 12 * shrink, 0.42 * shrink);
 
-  const jumpLift = level.height;
+  const jumpLift = level.height + level.hopLift;        // hopLift = the hop into / out of the rover
   const info = { x: 640, feetY: ground - jumpLift, height: Game.walker.astronautHeight };
   const view = Game.walker.chooseView(level);
   ctx.save();
+  ctx.globalAlpha *= level.playerAlpha;                 // fades while she climbs into the rover
   if (pose && pose.squash !== 1) {              // bending down: squash the body a little
     ctx.translate(0, ground);
     ctx.scale(1, pose.squash);
@@ -195,7 +201,7 @@ Game.walker.render = function (ctx, level) {
 
 // ===== GOAL POINTERS: a bouncing arrow above the next goal, or an edge arrow if it is off-screen =====
 Game.walker.drawPointers = function (ctx, level) {
-  if (level.frozen) { return; }
+  if (level.frozen || Game.hud.isInteractVisible()) { return; }       // no arrow when she is already at the goal
   const targets = Game.missions.currentTargets(level);
   let nearest = null;
   for (let i = 0; i < targets.length; i++) {

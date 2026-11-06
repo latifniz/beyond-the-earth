@@ -24,6 +24,15 @@ Game.config = {
     venus: { gravity: 900, jumpSpeed: 520 }    // closer to normal
   },
 
+  // ----- the lunar rover (Moon mission 3) -----
+  rover: {
+    speed: 520,            // forward speed (the astronaut walks at 300)
+    sideSpeed: 360,        // steering sideways
+    size: 270,             // how big the rover is on the screen
+    bodyRadius: 58,        // how wide the rover is for bumping into rocks
+    stopSpeed: 90          // below this speed counts as "stopped" (needed at the research point)
+  },
+
   // ----- optional pictures and voices (set to true AFTER you add the files) -----
   hasSidePictures: false,      // true if assets/images/astronaut/<suit>-side.png exist
   useRecordedVoices: true,     // true if assets/audio/voice/teacher-1.mp3, student-1.mp3, teacher-2.mp3 exist
