@@ -46,7 +46,7 @@ Game.walker.newLevel = function (planet) {
     walkPhase: 0, lastStepSide: 0, facingLeft: false,
     input: { left: false, right: false, forward: false, back: false },
     frozen: false, cutscene: null, pose: null, hand: null, carryingFlag: false,
-    driving: false, roverState: null, blockers: [], hopLift: 0, playerAlpha: 1,       // lunar rover (see rover.js)
+    driving: false, roverState: null, blockers: [], collideDecor: false, hopLift: 0, playerAlpha: 1,       // rocks she cannot cross, rover and hop animations (see rover.js)
     objects: [], cells: {}, effects: [], skyStars: null
   };
 };
@@ -87,11 +87,49 @@ Game.walker.update = function (level, dt) {
 
   Game.walker.updateJump(level, dt);
   Game.walker.updateWalkCycle(level, dt);
-  Game.rover.update(level, dt);                  // bumping into rocks, wheels, dust (only when driving)
+  Game.walker.bump(level, dt);                   // rocks she cannot walk through
+  Game.rover.update(level, dt);                  // wheels and dust (only when driving)
   if (level.planet.onUpdate) { level.planet.onUpdate(level, dt); }
   Game.missions.update(level);
   Game.effects.update(level, dt);
   Game.world.forgetOldCells(level);
+};
+
+// ===== ROCKS SHE CANNOT WALK THROUGH =====
+// level.blockers is a list of circles on the ground: { x, z, radius }. Missions put rocks in it.
+// If level.collideDecor is true, the ordinary rocks of the ground (world.js) block her too.
+// When she is inside a circle, she is pushed back out. The same code works for the walking
+// astronaut and for the rover (the rover is wider: see config.js).
+Game.walker.bump = function (level, dt) {
+  level.bumpTimer = (level.bumpTimer || 0) - dt;
+  if (level.cutscene) { return; }
+  const circles = level.blockers.slice();
+  if (level.collideDecor) {
+    const cellX = Math.floor(level.worldX / Game.world.cellWidth);
+    const cellZ = Math.floor(level.worldZ / Game.world.cellDepth);
+    for (let cx = cellX - 1; cx <= cellX + 1; cx++) {
+      for (let cz = cellZ - 1; cz <= cellZ + 1; cz++) {
+        const items = Game.world.getCell(level, cx, cz);
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].type === "rock") { circles.push({ x: items[i].x, z: items[i].z, radius: items[i].size * 0.36 }); }
+        }
+      }
+    }
+  }
+  const reach = level.driving ? Game.config.rover.bodyRadius : Game.config.walkerRadius;
+  for (let i = 0; i < circles.length; i++) {
+    const rock = circles[i];
+    const dx = level.worldX - rock.x;
+    const dz = level.worldZ - rock.z;
+    const distance = Math.sqrt(dx * dx + dz * dz) || 0.01;
+    const minimum = rock.radius + reach;
+    if (distance < minimum) {
+      level.worldX = rock.x + dx / distance * minimum;       // push her out of the rock
+      level.worldZ = rock.z + dz / distance * minimum;
+      level.speedZ *= 0.5; level.speedX *= 0.5;
+      if (level.bumpTimer <= 0 && level.driving) { Game.audio.play("thud"); level.bumpTimer = 0.6; }
+    }
+  }
 };
 
 // ===== LOW-GRAVITY JUMP =====

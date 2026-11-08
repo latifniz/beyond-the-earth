@@ -1,7 +1,7 @@
 # Beyond The Earth: Classroom to Cosmos
 
 ## 1. What the game is
-A space game made by three Class 9 girls and their teacher for the STEAM Exhibition. A student is chosen for a space mission. She picks a space suit and visits the **Moon**, **Mars** and **Venus**. On each planet she completes missions (the Moon has three, including a drive in the lunar rover) and then answers a 3-question quiz. Finishing a planet unlocks the next one.
+A space game made by three Class 9 girls and their teacher for the STEAM Exhibition. A student is chosen for a space mission. She picks a space suit and visits the **Moon**, **Mars** and **Venus**. On each planet she completes missions (the Moon and Mars have three each, including a rover drive and a dust storm) and then answers a 3-question quiz. Finishing a planet unlocks the next one.
 
 Made with only **HTML, CSS and JavaScript**. No internet is needed to play.
 
@@ -27,7 +27,7 @@ If the computer cannot do 3D, the game automatically falls back to the flat 2D v
 3. Move in all four directions with the on-screen buttons (hold them) or the keyboard:
    - **Arrow keys / W A S D** = walk, **Space** = jump, **E** = INTERACT
 4. Click glowing items when you are close. Walk to marked spots and press **INTERACT** (or **ACTIVATE**, **TAKE CAMERA**).
-5. Press **Missions** (top right) to see your list. Finish all the missions, press **Now Quiz**. (On the Moon, mission 3 is the rover trip: walk to the rover, press **E** to get in, drive to the three glowing markers and press **E** to scan, then drive back to the station and press **E** to get out.)
+5. Press **Missions** (top right) to see your list. Finish all the missions, press **Now Quiz**. (On Mars, mission 3 is a dust storm: find the shelter before it gets too thick, then press **E** to go in. On the Moon, mission 3 is the rover trip: walk to the rover, press **E** to get in, drive to the three glowing markers and press **E** to scan, then drive back to the station and press **E** to get out.)
 
 ## 4. Folder map
 ```
@@ -43,7 +43,7 @@ js/
                       destination, travel, quiz, finale
   levels/             walker.js (walking engine) - world.js (endless ground)
                       missions.js - hud.js - cutscene.js - effects.js - controls.js
-                      rover.js - moon.js - mars.js - venus.js - venus_camera.js
+                      rover.js - storm.js - moon.js - mars.js - venus.js - venus_camera.js
   drawing/            astronaut.js - spacecraft.js - terrain.js - props.js - props_objects.js - props_rover.js
   main.js             loads pictures, then starts the game
 assets/images/        pictures    assets/fonts/   fonts    assets/audio/voice/  (optional voices)

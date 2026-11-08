@@ -55,6 +55,9 @@ Game.cutscene.mix = function (a, b, p) {
   return a + (b - a) * eased;
 };
 
+// Keep a number between 0 and 1 (handy for fading: clamp01((p - 0.5) / 0.5) fades during the second half).
+Game.cutscene.clamp01 = function (value) { return Math.max(0, Math.min(1, value)); };
+
 // Draw what she carries. info = { x, feetY, height } of the astronaut on screen.
 //   level.carryingFlag = true      -> small folded flag on her backpack
 //   level.hand = {type, open, ...} -> something in her hand (flag or camera)

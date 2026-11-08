@@ -57,7 +57,11 @@ Game.planets.mars = {
     grad.addColorStop(1, "rgba(120,50,20,0.12)");
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 1280, 720);
+    Game.storm.draw(ctx, level);              // the dust storm of mission 3 (nothing before the mission starts)
   },
+
+  // Runs every frame: moves the dust of the storm.
+  onUpdate: function (level, dt) { Game.storm.update(level, dt); },
 
   // Place the big crater and the broken spacecraft in the world when the level starts.
   setup: function (level) {
@@ -100,6 +104,21 @@ Game.planets.mars = {
           run: function (level, done) { Game.planets.mars.repairAndLaunch(level, done); }
         }
       ]
+    },
+    {
+      // MISSION 3: a dust storm is coming. Walk to the shelter and press E. (see js/levels/storm.js)
+      text: Game.text.planets.mars.mission3,
+      stages: [{
+        kind: "act", id: "shelter", mark: "ring", radius: 190,
+        hint: Game.text.planets.mars.hintShelter,
+        message: Game.text.planets.mars.shelterMessage,
+        button: Game.text.planets.mars.enterShelter,
+        prepare: function (level) { Game.storm.start(level); },
+        // The shelter is far ahead, a little to the side.
+        place: function (level) { return { x: level.worldX + 120, z: level.worldZ + 3600 }; },
+        scenery: function (level, place) { Game.storm.placeShelter(level, place); },
+        run: function (level, done) { Game.storm.enterShelter(level, done); }
+      }]
     }
   ],
 

@@ -26,6 +26,7 @@ Game.hud.setup = function (planet) {
   hudById("missions-panel").classList.add("hidden");
   Game.hud.hideInteract();
   Game.hud.hideProgress();
+  Game.hud.hideStorm();
   Game.hud.hidePopup();
   hudById("send-button").classList.add("hidden");
   hudById("hint-text").textContent = "";
@@ -73,6 +74,17 @@ Game.hud.hideProgress = function () {
   hudById("progress-bar").classList.add("hidden");
   hudById("progress-label").classList.add("hidden");
 };
+
+// ----- the dust storm warning (Mars mission 3): a label and a bar from 0 to 1 -----
+Game.hud.showStorm = function (label, amount) {
+  hudById("storm-meter").classList.remove("hidden");
+  Game.hud.setStorm(label, amount);
+};
+Game.hud.setStorm = function (label, amount) {
+  if (label) { hudById("storm-label").textContent = label; }
+  hudById("storm-fill").style.width = Math.round(amount * 100) + "%";
+};
+Game.hud.hideStorm = function () { hudById("storm-meter").classList.add("hidden"); };
 
 // ----- purple pop-up with one button -----
 Game.hud.showPopup = function (title, text, buttonLabel, callback) {

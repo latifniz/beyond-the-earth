@@ -2,7 +2,7 @@
    FILE: js/levels/rover.js
    WHAT IT DOES: Everything about driving the LUNAR ROVER in Moon mission 3:
      - Game.rover.enter  : cutscene, the astronaut hops into the rover
-     - Game.rover.update : while driving: turn the wheels, make dust, bump into rocks
+     - Game.rover.update : while driving: turn the wheels and make dust
      - Game.rover.drawDriving : draws the rover (with the astronaut inside) instead of the walker
      - Game.rover.scan   : cutscene, the scanner arm goes up and scans the marker
      - Game.rover.exit   : cutscene, the astronaut hops out and stands beside the rover
@@ -16,9 +16,6 @@
    ===================================================================== */
 
 Game.rover = {};
-
-// Keep a number between 0 and 1.
-Game.rover.clamp01 = function (value) { return Math.max(0, Math.min(1, value)); };
 
 // ===== ENTER THE ROVER (cutscene) =====
 // The parked rover is the marker object of the current stage (level.stage.mark).
@@ -37,8 +34,8 @@ Game.rover.enter = function (level, done) {
       update: function (lv, p) {
         lv.hopLift = Math.sin(p * Math.PI) * 90;
         lv.worldZ = mix(startZ, parked.z, p);
-        lv.playerAlpha = 1 - Game.rover.clamp01((p - 0.55) / 0.35);
-        parked.seat = Game.rover.clamp01((p - 0.45) / 0.55);
+        lv.playerAlpha = 1 - Game.cutscene.clamp01((p - 0.55) / 0.35);
+        parked.seat = Game.cutscene.clamp01((p - 0.45) / 0.55);
       },
       exit: function (lv) {
         // The parked rover becomes "the player": same place, same size, so nothing jumps.
@@ -46,7 +43,7 @@ Game.rover.enter = function (level, done) {
         parked.hidden = true;
         lv.worldX = parked.x; lv.worldZ = parked.z;
         lv.driving = true;
-        lv.roverState = { wheel: 0, scan: 0, dustTimer: 0, bumpTimer: 0 };
+        lv.roverState = { wheel: 0, scan: 0, dustTimer: 0 };
         Game.audio.play("thud");
       } },
     { time: 1.0,    // 2. A short pause: "you are in the driver's seat".
@@ -69,8 +66,8 @@ Game.rover.exit = function (level, done) {
       },
       update: function (lv, p) {
         lv.hopLift = Math.sin(p * Math.PI) * 90;
-        lv.playerAlpha = Game.rover.clamp01(p / 0.45);
-        parked.seat = 1 - Game.rover.clamp01(p / 0.5);
+        lv.playerAlpha = Game.cutscene.clamp01(p / 0.45);
+        parked.seat = 1 - Game.cutscene.clamp01(p / 0.5);
       },
       exit: function (lv) { lv.hopLift = 0; lv.playerAlpha = 1; parked.seat = 0; startX = lv.worldX; Game.audio.play("thud"); } },
     { time: 1.1,    // 1. She walks a few steps to the left and stands beside the rover.
@@ -106,23 +103,6 @@ Game.rover.update = function (level, dt) {
 
   // The wheels turn faster when the rover goes faster.
   state.wheel += level.speedZ * dt * 0.05;
-
-  // Bump into the rocks that block the way (circles on the ground).
-  const reach = Game.config.rover.bodyRadius;
-  for (let i = 0; i < level.blockers.length; i++) {
-    const rock = level.blockers[i];
-    const dx = level.worldX - rock.x;
-    const dz = level.worldZ - rock.z;
-    const distance = Math.sqrt(dx * dx + dz * dz) || 0.01;
-    const minimum = rock.radius + reach;
-    if (distance < minimum) {
-      level.worldX = rock.x + dx / distance * minimum;       // push the rover out of the rock
-      level.worldZ = rock.z + dz / distance * minimum;
-      level.speedZ *= 0.5; level.speedX *= 0.5;
-      if (state.bumpTimer <= 0) { Game.audio.play("thud"); state.bumpTimer = 0.6; }
-    }
-  }
-  state.bumpTimer -= dt;
 
   // Moon dust behind the wheels.
   state.dustTimer -= dt;

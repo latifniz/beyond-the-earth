@@ -190,3 +190,55 @@ Game.props.draw.part = function (ctx, x, y, size, item, palette, time) {
   ctx.fillStyle = "#555a6e"; ctx.beginPath(); ctx.arc(0, 0, 8 * u, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
 };
+
+// ===== MARS: THE SHELTER (a rocky cave opening with a warm light inside) =====
+// It looks different from ordinary rocks: big red rock arch, dark opening with a warm glow,
+// two blinking lamps, a sign and a glowing amber light column so it can be seen from far away.
+Game.props.draw.shelter = function (ctx, x, y, size, item, palette, time) {
+  const u = size / 100;
+  Game.props.shadow(ctx, x, y, 140 * u, 12 * u, 0.3);
+  Game.props.drawBeacon(ctx, x, y - 70 * u, size * 1.1, "rgba(255,190,80,", time);
+
+  ctx.save();
+  ctx.translate(x, y);
+  // the big rock mass: a lumpy dome
+  ctx.beginPath();
+  ctx.moveTo(-130 * u, 0);
+  for (let i = 0; i <= 12; i++) {
+    const angle = Math.PI + (i / 12) * Math.PI;
+    const bump = 0.86 + Game.terrain.hash(i, 77) * 0.2;
+    ctx.lineTo(Math.cos(angle) * 130 * u * bump, Math.sin(angle) * 118 * u * bump);
+  }
+  ctx.lineTo(130 * u, 0);
+  ctx.closePath();
+  const rock = ctx.createLinearGradient(-110 * u, -118 * u, 110 * u, 0);
+  rock.addColorStop(0, "#d48a55"); rock.addColorStop(0.55, "#9b522c"); rock.addColorStop(1, "#5a2a16");
+  ctx.fillStyle = rock; ctx.fill();
+  ctx.strokeStyle = "rgba(40,10,0,0.35)"; ctx.lineWidth = 2 * u; ctx.stroke();
+  // cracks
+  ctx.strokeStyle = "rgba(255,225,190,0.18)"; ctx.lineWidth = 1.5 * u;
+  ctx.beginPath(); ctx.moveTo(-70 * u, -60 * u); ctx.lineTo(-48 * u, -92 * u); ctx.moveTo(60 * u, -70 * u); ctx.lineTo(82 * u, -42 * u); ctx.stroke();
+
+  // the cave opening: dark, with a warm light on the floor
+  ctx.beginPath();
+  ctx.moveTo(-40 * u, 0); ctx.lineTo(-40 * u, -42 * u);
+  ctx.quadraticCurveTo(-40 * u, -80 * u, 0, -80 * u);
+  ctx.quadraticCurveTo(40 * u, -80 * u, 40 * u, -42 * u);
+  ctx.lineTo(40 * u, 0); ctx.closePath();
+  const cave = ctx.createLinearGradient(0, -80 * u, 0, 0);
+  cave.addColorStop(0, "#1a0b06"); cave.addColorStop(0.6, "#3a1a0c"); cave.addColorStop(1, "#ffcf7a");
+  ctx.fillStyle = cave; ctx.fill();
+  ctx.strokeStyle = "#f0b27a"; ctx.lineWidth = 3 * u; ctx.stroke();      // bright rim
+
+  // two blinking lamps beside the opening
+  for (let side = -1; side <= 1; side += 2) {
+    const on = Math.sin(time * 5 + side) > 0;
+    ctx.fillStyle = on ? "#ffd24a" : "#7a5a1a";
+    ctx.beginPath(); ctx.arc(side * 52 * u, -34 * u, 5 * u, 0, Math.PI * 2); ctx.fill();
+  }
+  // the sign
+  ctx.font = "700 " + Math.max(11, 15 * u) + 'px "Montserrat", sans-serif';
+  ctx.textAlign = "center"; ctx.lineWidth = 3; ctx.strokeStyle = "rgba(40,10,0,0.85)"; ctx.fillStyle = "#ffe29a";
+  ctx.strokeText("SHELTER", 0, -92 * u); ctx.fillText("SHELTER", 0, -92 * u);
+  ctx.restore();
+};

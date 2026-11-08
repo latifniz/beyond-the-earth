@@ -12,6 +12,7 @@ Game.config = {
   sideSpeed: 260,          // how fast she walks left / right
   acceleration: 1100,      // how quickly she speeds up (bigger = snappier)
   friction: 1500,          // how quickly she slows down when you let go
+  walkerRadius: 38,        // how wide she is when bumping into rocks (only where rocks block her)
   reachDistance: 230,      // how close she must be to pick something up
   focalLength: 300,        // how strong the 3D perspective is (see walker.js)
 
@@ -22,6 +23,11 @@ Game.config = {
     moon:  { gravity: 380, jumpSpeed: 420 },   // very floaty  (Moon gravity is 1/6 of Earth)
     mars:  { gravity: 520, jumpSpeed: 470 },   // floaty       (Mars gravity is about 1/3 of Earth)
     venus: { gravity: 900, jumpSpeed: 520 }    // closer to normal
+  },
+
+  // ----- the dust storm (Mars mission 3) -----
+  storm: {
+    rampSeconds: 45        // how long the storm takes to become strong (it never hurts her: it just gets harder to see)
   },
 
   // ----- the lunar rover (Moon mission 3) -----
